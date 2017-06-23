@@ -7,5 +7,5 @@ import animals from './animal'
 export default combineReducers({
     script,
     user,
-    animals,
+    animals
 }) 
