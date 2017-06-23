@@ -3,6 +3,7 @@ import {render} from 'react-dom'
 import {Route, HashRouter as Router, Switch} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
+import FirebaseUtil from './script/FirebaseUtil'
 
 import {Layout, Home, AddAnimal, AnimalDetail, AnimalPage, AnimalTimeline, ContactUs, Login, Notification, UserProfile} from './app/page'
 import AppHead from './app/component/AppHead'
@@ -34,4 +35,5 @@ const Root = () => (
     </Provider>
 )
 
+FirebaseUtil.initialApp()
 render(<Root />, document.getElementById('app'))
