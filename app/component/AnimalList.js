@@ -1,17 +1,17 @@
 import React from 'react'
 import {connect} from 'react-redux'
 
-class DogList extends React.Component{
+class AnimalList extends React.Component{
     render(){
         return (
             <div>
-                {this.props.dogs.map( d => <Dog key={d.name} name={d.name} id={d.id} />)}
+                {this.props.animals.map( d => <Animal key={d.name} name={d.name} id={d.id} />)}
             </div>
         )
     }
 }
 
-const Dog = ({name, id}) => (
+const Animal = ({name, id}) => (
     <div>
         name: {name}<br/>
         id: {id}
@@ -20,8 +20,8 @@ const Dog = ({name, id}) => (
 
 const mapStateToProps = (store) => {
     return {
-        dogs: store.dogs,
+        animals: store.animals,
     }
 }
 
-export default connect(mapStateToProps)(DogList)
+export default connect(mapStateToProps)(AnimalList)

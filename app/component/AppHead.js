@@ -7,7 +7,7 @@ import { fbsdkLoaded, gmapLoaded } from '../redux/action/script'
 class AppHead extends React.Component{
     constructor(){
         super()
-        this.menuLink = ['/','/Dog']
+        this.menuLink = ['/','/Animal']
     }
 
     componentDidMount(){
