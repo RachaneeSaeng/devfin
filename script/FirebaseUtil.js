@@ -2,55 +2,43 @@ import * as firebase from 'firebase'
 // import {createStore} from 'redux'
 // import {connect} from 'react-redux'
 // import reducer from '../app/redux/reducer/reducer'
-import {setLoggedIn} from '../app/redux/action/authen'
+import { setLoggedIn } from '../app/redux/action/authen'
 
 class FirebaseUtil {
 
-    static initialApp(store) {      
-      const config = {
-            apiKey: "AIzaSyC3bCd8GZlOSoC0tiD9Ets3lWhbo_TquQE",
-            authDomain: "devfin-project.firebaseapp.com",
-            databaseURL: "https://devfin-project.firebaseio.com",
-            projectId: "devfin-project",
-            storageBucket: "devfin-project.appspot.com",
-            messagingSenderId: "925604061013"
-        }
-        firebase.initializeApp(config)
-        this.listenToAuthStateChange()
-        this.fbUi = new firebaseui.auth.AuthUI(firebase.auth())  
-        this.reduxStore = store
-  }
-
-  static auth() {
-    return firebase.auth();
-  }
-
-  static database() {
-    return firebase.database();
-  }
-
-  static storage() {
-    return firebase.storage();
+  static initialApp(store) {
+    var config = {
+      apiKey: "AIzaSyD8-qoZFdLW8aqEfl91EWapGK3za98g45I",
+      authDomain: "testproject-3782c.firebaseapp.com",
+      databaseURL: "https://testproject-3782c.firebaseio.com",
+      projectId: "testproject-3782c",
+      storageBucket: "testproject-3782c.appspot.com",
+      messagingSenderId: "303688420444"
+    };
+    firebase.initializeApp(config)
+    this.listenToAuthStateChange()
+    this.fbUi = new firebaseui.auth.AuthUI(firebase.auth())
+    this.reduxStore = store
   }
 
   // **** AUTHENTICATION *****
   static listenToAuthStateChange() {
-      const thisObj = this
+    const thisObj = this
     firebase.auth().onAuthStateChanged(function (user) {
-          user ? thisObj.handleSignedInUser(user) : thisObj.handleSignedOutUser()
-      })
+      user ? thisObj.handleSignedInUser(user) : thisObj.handleSignedOutUser()
+    })
   }
 
-    static handleSignedInUser(user) {  
-      this.reduxStore.dispatch(setLoggedIn(true)) 
+  static handleSignedInUser(user) {
+    this.reduxStore.dispatch(setLoggedIn(true))
   }
 
   static handleSignedOutUser() {
-      this.reduxStore.dispatch(setLoggedIn(false))
+    this.reduxStore.dispatch(setLoggedIn(false))
   }
 
   static signOut() {
-      firebase.auth().signOut()
+    firebase.auth().signOut()
   }
 
   static deleteAccount() {
@@ -61,11 +49,11 @@ class FirebaseUtil {
           // The timeout allows the message to be displayed after the UI has
           // changed to the signed out state.
           setTimeout(function () {
-              alert('Please sign in again to delete your account.')
-            }, 1)
-          })
+            alert('Please sign in again to delete your account.')
+          }, 1)
+        })
       }
-      })
+    })
   }
 
   static getDogs() {
@@ -73,7 +61,7 @@ class FirebaseUtil {
       var animalArr = [];
       var animalObj = snapshot.val();
       const animalIds = Object.keys(animalObj);
-      
+
       animalIds.forEach(function (item, index) {
         var photourls = [];
         if (animalObj[item].photo_urls) {
@@ -88,7 +76,7 @@ class FirebaseUtil {
             type: animalObj[item].type,
             photo_urls: photourls,
             views: animalObj[item].views ? animalObj[item].views : 0,
-            owner: animalObj[item].author.uid,
+            owner: animalObj[item].owner,
             timestamp: animalObj[item].timestamp
           }
         )
@@ -97,23 +85,55 @@ class FirebaseUtil {
     });
   }
 
+  static getAnimalTimeline(animalId) {
+    return firebase.database().ref(`timelines/${animalId}`).once('value').then(function (snapshot) {
+      var timelineArr = [];
+      var timelinesObj = snapshot.val();
+      if (timelinesObj) {
+        const timelineIds = Object.keys(timelinesObj);
+
+        timelineIds.forEach(function (item, index) {
+          var photourls = [];
+          if (timelinesObj[item].animal_photo_urls) {
+            Object.values(timelinesObj[item].animal_photo_urls).forEach(function (photo, idx) {
+              photourls.push(photo);
+            });
+          }
+          timelineArr.push(
+            {
+              id: item,
+              title: timelinesObj[item].title,
+              message: timelinesObj[item].message,
+              photo_urls: photourls,
+              timestamp: timelinesObj[item].timestamp,
+              added_by: timelinesObj[item].added_by,
+              added_by_photo_url: timelinesObj[item].added_by_photo_url,
+            }
+          )
+        });
+      }
+
+      return timelineArr;
+    });
+  }
+
   // function updateProfile() {
-    //   var nameValue = document.getElementById("firstname").value
-    //   var user = firebase.auth().currentUser
+  //   var nameValue = document.getElementById("firstname").value
+  //   var user = firebase.auth().currentUser
 
   //   user.updateProfile({
   //     displayName: nameValue
   //   }).then(function() {
-    //     //displayUpdatePanel(false)
+  //     //displayUpdatePanel(false)
   //   }, function(error) {
-    //     console.log(error)
-    //   })
+  //     console.log(error)
+  //   })
 
   // user.updateEmail("user@example.com").then(function() {
   //   // Update successful.
   // }, function(error) {
   //   // An error happened.
-      // })
+  // })
   //}
 }
 //export default connect()(FirebaseUtil)
