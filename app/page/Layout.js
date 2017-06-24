@@ -108,7 +108,7 @@ class Layout extends React.Component {
         <div>  
             <div>
                 <Sidebar.Pushable as={Segment}>                    
-                    <Sidebar as={Menu} animation='overlay' width='wide' visible={visible} icon='labeled' vertical inverted>
+                    <Sidebar as={Menu} animation='overlay' width='thin' visible={visible} icon='labeled' vertical inverted>
                         <div>
                             <span id='close' style={closeStyle} onClick={this.hideVisibility.bind(this)}>X</span>
                             <br/><br/><br/><br/>

@@ -3,19 +3,30 @@ import {connect} from 'react-redux'
 
 class AnimalList extends React.Component{
     render(){
-        return (
-            <div>
-                {this.props.animals.map( d => <Animal key={d.name} name={d.name} id={d.id} />)}
-            </div>
+        return (            
+            <table className='tableCss'>
+                {this.props.animals.map( 
+                    d => <Animal name = {d.name} 
+                            age = {d.name} 
+                            sex = {d.sex} 
+                            loc = {d.loc}/>)}
+            </table>
         )
     }
 }
 
-const Animal = ({name, id}) => (
-    <div>
-        name: {name}<br/>
-        id: {id}
-    </div>
+const Animal = ({name, age, sex, loc}) => (
+    <tr className='cardContainerCss'>
+        <td className='cardPartialLeftCss'>
+            <img src='http://images.shibashake.com/wp-content/blogs.dir/7/files/2010/03/IMG_2431-520x390.jpg' className='imgCss'/>
+        </td>
+        <td className='cardPartialRightCss'>
+            <div className='textLineCss'><label>ชื่อ: </label> {name}}</div>
+            <div className='textLineCss'><label>อายุ: </label> {age}</div>
+            <div className='textLineCss'><label>เพศ: </label> {sex}}</div>
+            <div className='textLineCss'><label>สถานที่: </label> {loc}}</div>
+        </td>
+    </tr>
 )
 
 const mapStateToProps = (store) => {

@@ -21,8 +21,8 @@ const Root = () => (
         <Router>
             <div>                
                 <Route exact path='/' component={Home} />
-                <Route exact path='/addanimal' component={AddAnimal} />
-                <Route exact path='/animaldetail' component={AnimalDetail} />
+                <Route exact path='/addanimal' component={AnimalDetail} />
+                <Route exact path='/animaldetail/:id' component={AnimalDetail} />
                 <Route exact path='/animalpage' component={AnimalPage} />
                 <Route exact path='/timeline' component={AnimalTimeline} />
                 <Route exact path='/contactus' component={ContactUs} />
