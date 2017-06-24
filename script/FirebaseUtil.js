@@ -35,7 +35,7 @@ class FirebaseUtil {
 
   // **** AUTHENTICATION *****
   static listenToAuthStateChange() {
-      const thisObj = this
+    const thisObj = this
     firebase.auth().onAuthStateChanged(function (user) {
           user ? thisObj.handleSignedInUser(user) : thisObj.handleSignedOutUser()
       })
