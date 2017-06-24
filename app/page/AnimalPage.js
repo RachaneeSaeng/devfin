@@ -1,6 +1,7 @@
 import React from 'react'
 import GoogleMapReact  from 'google-map-react'
 import AnimalList from '../component/AnimalList'
+import {connect} from 'react-redux'
 
 const CustomMarker = ({ text }) => <div className='markerCss'><b className='textCss'>{text}</b></div>;
 
@@ -25,6 +26,12 @@ class AnimalPage extends React.Component{
         this.state.LocList.push(this.Loc3)
         this.state.LocList.push(this.Loc4)
         this.state.LocList.push(this.Loc5)
+    }
+
+    PerformSearch(){
+        var text = $('#search-text-box').val();
+
+        //perform search and set state
     }
 
     ChangeMode(m) {
@@ -72,7 +79,9 @@ class AnimalPage extends React.Component{
             return (
                 <div className='ui container'>
                     <div id='search-control' className='searchControlCss'>
-                        <input id='search-text-box' type='text' className='searchTextBox' placeholder='Search...' />
+                        <form onSubmit={this.PerformSearch.bind(this)}>
+                            <input id='search-text-box' type='text' className='searchTextBox' placeholder='Search...'/>
+                        </form>
                         <div>
                             <input id='search-mode-card' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 1)} className='radioCss'/><label className='labelCss'>View by Card</label>
                             <input id='search-mode-map' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 2)} className='radioCss'/><label className='labelCss'>View By Map</label>
@@ -103,20 +112,22 @@ class AnimalPage extends React.Component{
             return(
                 <div className='ui container'>
                     <div id='search-control' className='searchControlCss'>
-                        <input id='search-text-box' type='text' className='searchTextBox' placeholder='Search...' />
+                        <form onSubmit={this.PerformSearch.bind(this)}>
+                            <input id='search-text-box' type='text' className='searchTextBox' placeholder='Search...'/>
+                        </form>
                         <div>
                             <input id='search-mode-card' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 1)} className='radioCss'/><label className='labelCss'>View by Card</label>
                             <input id='search-mode-map' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 2)} className='radioCss'/><label className='labelCss'>View By Map</label>
                         </div>                    
                     </div>
                     <div>
-                        <AnimalList />
+                        <AnimalList />   
                         <table className='tableCss'>
                             <tr className='cardContainerCss'>
-                                <td className='cardPartialLeftCss'>
+                                <td className='cardPartialLeftCss' align='left'>
                                     <img src='http://images.shibashake.com/wp-content/blogs.dir/7/files/2010/03/IMG_2431-520x390.jpg' className='imgCss'/>
                                 </td>
-                                <td className='ardPartialRightCss'>
+                                <td className='cardPartialRightCss' align='right'>
                                     <div className='textLineCss'><label>ชื่อ: </label> John</div>
                                     <div className='textLineCss'><label>อายุ: </label> 8</div>
                                     <div className='textLineCss'><label>เพศ: </label> ผู้</div>
@@ -125,17 +136,17 @@ class AnimalPage extends React.Component{
                             </tr>
 
                             <tr className='cardContainerCss'>
-                                <td className='cardPartialLeftCss'>
+                                <td className='cardPartialLeftCss' align='left'>
                                     <img src='http://images.shibashake.com/wp-content/blogs.dir/7/files/2010/03/IMG_2431-520x390.jpg' className='imgCss'/>
                                 </td>
-                                <td className='cardPartialRightCss'>
+                                <td className='cardPartialRightCss' align='right'>
                                     <div className='textLineCss'><label>ชื่อ: </label> John</div>
                                     <div className='textLineCss'><label>อายุ: </label> 8</div>
                                     <div className='textLineCss'><label>เพศ: </label> ผู้</div>
                                     <div className='textLineCss'><label>สถานที่: </label> บางกะปิ</div>
                                 </td>
                             </tr>
-                        </table>               
+                        </table>      
                     </div>    
                 </div>
             ) 
@@ -143,4 +154,4 @@ class AnimalPage extends React.Component{
     }
 }
 
-export default AnimalPage
+export default connect()(AnimalPage)
