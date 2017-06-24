@@ -41,3 +41,15 @@ header div img {
 .text-rigth {
   text-align: right;
 }
+
+.timeline-image-center-alignment {
+  max-height: 100%;  
+    max-width: 100%; 
+    width: auto;
+    height: auto;
+    position: absolute;  
+    bottom: 0;  
+    left: 0;  
+    right: 0;  
+    margin: auto;
+}

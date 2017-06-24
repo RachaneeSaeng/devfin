@@ -117,6 +117,12 @@ class FirebaseUtil {
     });
   }
 
+  static getAnimalDetail(animalId) {
+    return firebase.database().ref(`/animals/${animalId}`).once('value').then(snap => {
+      return snap.val();
+    });
+  }
+
   // function updateProfile() {
   //   var nameValue = document.getElementById("firstname").value
   //   var user = firebase.auth().currentUser
