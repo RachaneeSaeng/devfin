@@ -6,19 +6,22 @@ import {
 } from '../action/currentAnimal'
 
 const init = {
-    animalId: null,
-    animalName: null,
-    animalType: null,
     isLoading: false,
     isEditMode: true,
     isCapturing: false,
+    animalId: null,
+    animalName: null,
+    animalType: null,
     photo_urls: [],
     views: 0,
     breed: null,
     gender: null,
-    location: { lat: 13.7563, lng: 100.5018 },
+    geo: { lat: 13.7563, lng: 100.5018 },
+    location: null,
+    status: null,
     contact: null,
-    description: null
+    description: null,
+    owner: null,
 }
 
 const currentAnimal = (state = init, action) => {

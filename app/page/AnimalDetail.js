@@ -5,9 +5,11 @@ import * as firebase from 'firebase'
 import * as actionCreator from '../redux/action/currentAnimal'
 
 import {LabeledInput, Button} from '../component/ui'
+import Camera from '../component/Camera'
 
 class AnimalDetail extends React.Component {
     database = firebase.database()
+    storage = firebase.storage()
     auth = firebase.auth()
     componentDidMount(){
         if(this.props.match.params.id){
@@ -36,9 +38,10 @@ class AnimalDetail extends React.Component {
                 <div id='detail-images'>
                     { this.props.photoUrls.map( url => (<img key={url} src={url} alt='dog-image' />)) }
                 </div>
-                <Button hidden={!this.props.edit}>
+                <Button hidden={!this.props.edit} onClick={()=>{!this.props.capture?this.props.dispatch(actionCreator.beginCapture()):this.props.dispatch(actionCreator.endCapture())}}>
                     <i className='ui icon camera'></i>
                 </Button>
+                {this.props.capture?<Camera />:null}
                 <Button hidden={!this.props.edit}>
                     <i className='ui icon pin'></i>
                 </Button>
@@ -47,7 +50,7 @@ class AnimalDetail extends React.Component {
                     <LabeledInput label='type' type='text' disabled={!this.props.edit} placeholder='หมา' defaultValue={this.props.animalType} />
                     <LabeledInput label='breed' type='text' disabled={!this.props.edit} placeholder='ไซบีเรียน ฮัสกี้' defaultValue={this.props.breed}/>
                     <LabeledInput label='gender' type='text' disabled={!this.props.edit} placeholder='ผู้' defaultValue={this.props.gender}/>
-                    <LabeledInput label='contact' type='text' disabled={true} defaultValue={this.props.contact || this.props.userContact}/>
+                    <LabeledInput label='contact' type='text' disabled={true} value={this.props.contact}/>
                     <LabeledInput label='description' type='text' disabled={!this.props.edit} placeholder='รายละเอียดอื่นๆ เช่น ขนยาว, น้องมีแผล, กลัวคน ผอมมาก' defaultValue={this.props.animalDescription} />
                 </div>
                 <div className='ui buttongroup'>
@@ -58,23 +61,50 @@ class AnimalDetail extends React.Component {
             </div>
         )
     }
+
+    uploadImage(images){
+        const promises = []
+        images.map( i => {
+            const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8)
+                return v.toString(16)
+            })
+            const gs = this.storage.ref(`${this.auth.currentUser.uid}/images/${uuid}`)
+            promises.push(gs.put(i).then( r => r.metadata.downloadURLs[0] ).catch( e => console.log(e)))
+        })
+        return Promise.all(promises)
+    }
+
     onSubmit(){
-        console.log(this)
-        const submitValue = {
-            animalName: $('#name').val(),
-            animalType: $('#type').val(),
-            breed: $('#breed').val(),
-            gender: $('#gender').val(),
-            location: { lat: 13.7563, lng: 100.5018 },
-            description: $('#description').val(),
-            contact: $('#contact').val(),
-            photo_urls: this.props.photoUrls,
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
+        const canvases = document.getElementsByClassName('camera-image')
+        const srcs = []
+        const blobPromises = []
+        for(let i=0; i<canvases.length; i++){
+            blobPromises.push(new Promise( (resolve, reject) => {
+                canvases[i].toBlob( b => resolve(b))
+            }))
         }
-        const newKey = this.props.animalId || this.database.ref('/animals/').push().key
-        const update = {}
-        update[`/animals/${newKey}`] = submitValue
-        this.database.ref().update(update).then( result => console.log(result) ).catch(err => console.log(err))
+        Promise.all(blobPromises)
+            .then( blobs => this.uploadImage(blobs) )
+            .then( urls => {
+                const submitValue = {
+                    animalName: $('#name').val(),
+                    animalType: $('#type').val(),
+                    breed: $('#breed').val(),
+                    gender: $('#gender').val(),
+                    location: { lat: 13.7563, lng: 100.5018 },
+                    description: $('#description').val(),
+                    contact: $('#contact').val(),
+                    photo_urls: urls.concat(this.props.photoUrls),
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                }
+                const newKey = this.props.animalId || this.database.ref('/animals/').push().key
+                const update = {}
+                update[`/animals/${newKey}`] = submitValue
+                this.database.ref().update(update).then( result => console.log(result) ).catch(err => console.log(err))
+                new Notification('Add animal successful!', {icon: '/image/shelter128.png'})
+                this.props.history.push('/animaldetail/' + newKey)
+            })
         this.props.dispatch(actionCreator.endEdit())
     }
 
@@ -85,9 +115,8 @@ class AnimalDetail extends React.Component {
     beginEdit() {
         this.props.dispatch(actionCreator.beginEdit())
     }
+
 }
-
-
 
 const mapStateToProps = (store) => {
     return {
@@ -101,10 +130,9 @@ const mapStateToProps = (store) => {
         breed: store.currentAnimal.breed,
         gender: store.currentAnimal.gender,
         foundLocation: store.currentAnimal.location,
-        contact: store.currentAnimal.contact,
+        contact: store.currentAnimal.contact || (store.authen && firebase.auth().currentUser.email),
         animalDescription: store.currentAnimal.description,
-        userContact: store.user.contact,
     }
 }
 
-export default connect(mapStateToProps)(withRouter(AnimalDetail))
+export default withRouter(connect(mapStateToProps)(AnimalDetail))
