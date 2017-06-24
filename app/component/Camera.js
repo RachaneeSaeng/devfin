@@ -1,17 +1,25 @@
 import React from 'react'
 
 class Camera extends React.Component{
+    stream = null
     componentDidMount(){
         const live = document.getElementById('live-camera')
         navigator.mediaDevices.getUserMedia({video: true})
             .then ( vid => {
                 live.src = window.URL.createObjectURL(vid)
                 live.play()
+                this.stream = vid
             })
             .catch ( err => {
                 alert(err)
             })
+    }
 
+    componentWillUnmount(){
+        const live = document.getElementById('live-camera')
+        live.pause()
+        live.src = ''
+        if (this.stream) this.stream.getTracks()[0].stop()
     }
 
     render(){
@@ -38,9 +46,6 @@ function captureImage(){
     const center = {x: srcWidth/2, y: srcHeight/2}
     const x = center.x - minLength / 2
     const y = center.y - minLength / 2
-    console.log(x)
-    console.log(scale)
-    console.log(minLength)
     canvas.getContext('2d').drawImage(live, x, y, minLength, minLength, 0, 0, 256, 256)
     document.getElementById('preview').appendChild(canvas)
 }

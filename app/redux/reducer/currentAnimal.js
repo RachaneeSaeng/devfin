@@ -2,13 +2,14 @@ import {
     BEGIN_FETCH, END_FETCH,
     BEGIN_EDIT, END_EDIT,
     BEGIN_CAPTURE, END_CAPTURE,
-    CREATE_NEW
+    CREATE_NEW, ERROR
 } from '../action/currentAnimal'
 
 const init = {
     isLoading: false,
     isEditMode: true,
     isCapturing: false,
+    error: null,
     animalId: null,
     animalName: null,
     animalType: null,
@@ -27,12 +28,13 @@ const init = {
 const currentAnimal = (state = init, action) => {
     switch (action.type){
         case BEGIN_FETCH: return {...init, isLoading: true}
-        case END_FETCH: return {...state, ...(action.detail), isLoading: false, isEditMode: false}
+        case END_FETCH: return {...state, ...(action.detail), isLoading: false, isEditMode: false, isCapturing: false}
         case BEGIN_EDIT: return {...state, isEditMode: true}
-        case END_EDIT: return {...state, isEditMode: false}
-        case BEGIN_CAPTURE: return {...state, isCapturing: true}
+        case END_EDIT: return {...state, isEditMode: false, isCapturing: false}
+        case BEGIN_CAPTURE: return {...state, isCapturing: true, isPicking: false}
         case END_CAPTURE: return {...state, isCapturing: false}
-        case CREATE_NEW: return {...init, animalName: 'Add new'}
+        case CREATE_NEW: return {...init}
+        case ERROR: return {...init, error: action.reason}
         default: return state
     }
 }
