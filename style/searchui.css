@@ -87,6 +87,20 @@
     cursor: pointer;
 }
 
+.star.icon.favIcon {    
+    color: orange;
+    font-size: 6em;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-top: 7%;
+}
+
+.star.icon.favIcon:hover {    
+    transform: scale(1.2, 1.2);
+    cursor: pointer;
+}
+
 .textLineCss {
     height: 50px;
     width: 100%;
