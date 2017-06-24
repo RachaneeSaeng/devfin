@@ -13,4 +13,4 @@ export const beginCapture = () => { return { type: BEGIN_CAPTURE } }
 export const endFetch = (detail) => { return { type: END_FETCH, detail } }
 export const endEdit = () => { return { type: END_EDIT } }
 export const endCapture = () => { return { type: END_CAPTURE } }
-export const createNewe = () => { return { type: CREATE_NEW } }
+export const createNew = () => { return { type: CREATE_NEW } }
