@@ -27,3 +27,17 @@ header div img {
   header { padding: 0; }
   
 }
+
+.comfort-mergin {
+  margin: 1rem;
+}
+
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-rigth {
+  text-align: right;
+}
