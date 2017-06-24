@@ -35,5 +35,5 @@ const Root = () => (
     </Provider>
 )
 
-FirebaseUtil.initialApp()
+FirebaseUtil.initialApp(store)
 render(<Root />, document.getElementById('app'))
