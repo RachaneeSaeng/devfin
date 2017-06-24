@@ -15,8 +15,8 @@ class AnimalList extends React.Component{
     }
 }
 
-const Animal = ({name, age, sex, loc}) => (
-    <tr className='cardContainerCss'>
+const Animal = ({name, age, sex, loc, link}) => (
+    <tr className='cardContainerCss' href={link}>
         <td className='cardPartialLeftCss'>
             <img src='http://images.shibashake.com/wp-content/blogs.dir/7/files/2010/03/IMG_2431-520x390.jpg' className='imgCss'/>
         </td>
@@ -25,6 +25,9 @@ const Animal = ({name, age, sex, loc}) => (
             <div className='textLineCss'><label>อายุ: </label> {age}</div>
             <div className='textLineCss'><label>เพศ: </label> {sex}}</div>
             <div className='textLineCss'><label>สถานที่: </label> {loc}}</div>
+        </td>
+        <td className='cardPartialIcon'>
+            <i className='empty star icon favIcon' fontSize='8em'></i>
         </td>
     </tr>
 )

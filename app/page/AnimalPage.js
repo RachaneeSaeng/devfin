@@ -131,7 +131,10 @@ class AnimalPage extends React.Component{
                                     <div className='textLineCss'><label>ชื่อ: </label> John</div>
                                     <div className='textLineCss'><label>อายุ: </label> 8</div>
                                     <div className='textLineCss'><label>เพศ: </label> ผู้</div>
-                                    <div className='textLineCss'><label>สถานที่: </label> บางกะปิ</div>
+                                    <div className='textLineCss'><label>สถานที่: </label> บางกะปิ</div>                                   
+                                </td>
+                                <td className='cardPartialIcon'>
+                                    <i className='empty star icon favIcon' fontSize='8em'></i>
                                 </td>
                             </tr>
 
@@ -143,7 +146,10 @@ class AnimalPage extends React.Component{
                                     <div className='textLineCss'><label>ชื่อ: </label> John</div>
                                     <div className='textLineCss'><label>อายุ: </label> 8</div>
                                     <div className='textLineCss'><label>เพศ: </label> ผู้</div>
-                                    <div className='textLineCss'><label>สถานที่: </label> บางกะปิ</div>
+                                    <div className='textLineCss'><label>สถานที่: </label> บางกะปิ</div>                                   
+                                </td>
+                                <td className='cardPartialIcon'>
+                                    <i className='empty star icon favIcon' fontSize='8em'></i>
                                 </td>
                             </tr>
                         </table>      

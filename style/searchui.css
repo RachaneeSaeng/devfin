@@ -65,7 +65,26 @@
 }
 
 .cardPartialRightCss {
-    width: 70%;
+    width: 50%;
+}
+
+.cardPartialIcon {
+    position: relative;
+    width: 20%;
+}
+
+.empty.star.icon.favIcon {    
+    color: orange;
+    font-size: 6em;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-top: 7%;
+}
+
+.empty.star.icon.favIcon:hover {    
+    transform: scale(1.2, 1.2);
+    cursor: pointer;
 }
 
 .textLineCss {
