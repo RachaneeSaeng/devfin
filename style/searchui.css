@@ -1,0 +1,72 @@
+.markerCss {
+      color:black;
+      background-color: orange;
+      font-size: 12px;
+      border-radius: 10px;
+      border-style: solid;
+      border-width: 6;
+      border-color: red; 
+    }
+
+.textCss  {
+     padding: 5px; 
+     background-color: orange;
+    }
+
+.searchControlCss {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    padding-left: 25%;
+    padding-right: 25%;
+}
+
+.searchTextBox {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    width: 100%;
+    border-radius: 10px;
+    height: 30px;
+    padding: 0 10px 0 10px;
+}
+
+.radioCss {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.labelCss {
+    margin: 0 10px 0 3px'
+}
+
+.cardContainerCss {
+    height: 200px;
+    background-color: #f1f1f1;
+    box-shadow: 2px 3px 12px 1px #a8a8a8;
+}
+
+.cardPartialLeftCss {
+    width: 30%;
+}
+
+.cardPartialRightCss {
+    width: 70%;
+}
+
+.textLineCss {
+    height: 50px;
+    width: 100%;
+    margin: 10px 0 10px 0;
+    font-weight: bold;
+    font-size: large;
+}
+
+.imgCss {
+    height: 250px;
+    width: 250px;
+}
+
+.tableCss {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
