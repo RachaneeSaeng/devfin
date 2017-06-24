@@ -1,41 +1,20 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import FirebaseUtil from '../../script/FirebaseUtil'
+import AddButton from '../component/AddButton'
+import {Button} from 'semantic-ui-react'
+//import FirebaseUtil from '../../script/FirebaseUtil'
 
 class Home extends React.Component{
     
-    componentDidMount(){
-        
-    }
-    
-    openAddAnimal() {
-        if (this.props.isLoggedIn) {
-            this.props.history.push('/addanimal')
-        }
-        else {            
-            this.props.history.push('/login?redirectUrl=addanimal')
-        }        
-    }
-
-    openAnimalList() {
-            this.props.history.push('/animalpage')        
-    }
-
     render() {              
         return (            
             <div>
                 <h2>Home page</h2>
-                <button onClick={this.openAddAnimal.bind(this)}>Add</button>
+                <AddButton parentPage={this}/>
                 {'  '}
-                <button onClick={this.openAnimalList.bind(this)}>Adopt</button>
+                <Button onClick={() => this.props.history.push('/animalpage')}>Adopt</Button>
             </div>            
         )
     }
 }
-const mapStateToProps = (store) => {
-    return {
-        isLoggedIn: store.authen,
-    }
-}
 
-export default connect(mapStateToProps)(Home)
+export default Home
