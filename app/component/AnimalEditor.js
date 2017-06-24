@@ -1,5 +1,5 @@
 import React from 'react'
-import {LabeledInput} from './LabeledInput'
+import {LabeledInput} from './ui'
 import {connect} from 'react-redux'
 import {addAnimal} from '../redux/action/animal'
 
