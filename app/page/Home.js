@@ -20,19 +20,6 @@ class Home extends React.Component {
         });
     }
 
-    openAddAnimal() {
-        if (FirebaseUtil.currentUser) {
-            this.props.history.push('/addanimal')
-        }
-        else {
-            this.props.history.push('/login?redirectUrl=addanimal')
-        }
-    }
-
-    openAnimalList() {
-        this.props.history.push('/animalpage')
-    }
-
     render() {
         return (
             <div>
