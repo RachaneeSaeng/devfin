@@ -9,10 +9,10 @@ const LabeledInput = ({label, type, disabled, placeholder, defaultValue}) => (
     </div>
 )
 
-const Button = ({className, hidden, children}) => (
-    <div className={`ui button ${className}`} style={{display:hidden?'none':''}}>
+const Button = ({className, hidden, onClick, children}) => (
+    <button className={`ui button ${className}`} style={{display:hidden?'none':''}} onClick={onClick}>
         {children}
-    </div>
+    </button>
 )
 
 export {LabeledInput, Button}
