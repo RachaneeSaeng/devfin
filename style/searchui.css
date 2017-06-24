@@ -8,10 +8,20 @@
       border-color: red; 
     }
 
+.markerCss:hover {
+    transform: scale(1.2, 1.2);
+    cursor: pointer;
+}
+
 .textCss  {
      padding: 5px; 
      background-color: orange;
-    }
+}
+
+.textCss:hover{
+    transform: scale(1.2, 1.2);
+    cursor: pointer;
+}
 
 .searchControlCss {
     margin-top: 1%;
@@ -35,13 +45,19 @@
 }
 
 .labelCss {
-    margin: 0 10px 0 3px'
+    margin: 0 10px 0 3px;
 }
 
 .cardContainerCss {
     height: 200px;
     background-color: #f1f1f1;
     box-shadow: 2px 3px 12px 1px #a8a8a8;
+}
+
+.cardContainerCss:hover {   
+    box-shadow: 4px 5px 14px 3px #a8a8a8;
+    transform: scale(1.01, 1.01);
+    cursor: pointer;
 }
 
 .cardPartialLeftCss {
@@ -68,5 +84,5 @@
 .tableCss {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 12px;
+    border-spacing: 0 15px;
 }

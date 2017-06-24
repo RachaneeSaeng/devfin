@@ -1,5 +1,6 @@
 import React from 'react'
 import GoogleMapReact  from 'google-map-react'
+import AnimalList from '../component/AnimalList'
 
 const CustomMarker = ({ text }) => <div className='markerCss'><b className='textCss'>{text}</b></div>;
 
@@ -24,16 +25,6 @@ class AnimalPage extends React.Component{
         this.state.LocList.push(this.Loc3)
         this.state.LocList.push(this.Loc4)
         this.state.LocList.push(this.Loc5)
-    }
-
-    SearchControl = () => {
-        <div id='search-control' className='searchControlCss'>
-            <input id='search-text-box' type='text' className='searchTextBox' placeholder='Search...' />
-            <div>
-                <input id='search-mode-radio' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 1)} className='radioCss'/><label className='labelCss'>View by Card</label>
-                <input id='search-mode-radio' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 2)} className='radioCss'/><label className='labelCss'>View By Map</label>
-            </div>                    
-        </div>
     }
 
     ChangeMode(m) {
@@ -119,6 +110,7 @@ class AnimalPage extends React.Component{
                         </div>                    
                     </div>
                     <div>
+                        <AnimalList />
                         <table className='tableCss'>
                             <tr className='cardContainerCss'>
                                 <td className='cardPartialLeftCss'>
