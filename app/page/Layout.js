@@ -12,7 +12,7 @@ class Layout extends React.Component {
         this.mainMenuLinks = {
             'Home':'/#/', 
             'อยากมีบ้าน':'/#/animalpage',
-            'มีบ้านแล้ว':'/#/timeline',
+            'มีบ้านแล้ว':'/#/nimalpage?type=adopted',
             'Popular':'/#/animalpage?type=popular',           
         }
         this.myMenuLinks = {           
