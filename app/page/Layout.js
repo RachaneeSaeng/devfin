@@ -1,35 +1,92 @@
 import React from 'react'
 // import {Link} from 'react-router-dom'
-import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react'
+import { Sidebar, Segment, Button, Menu, Image, Icon, Header, Divider } from 'semantic-ui-react'
+import {connect} from 'react-redux'
+import FirebaseUtil from '../../script/FirebaseUtil'
 
 class Layout extends React.Component {
     state = { visible: false }
 
-  constructor(){
+    constructor(){
         super()
-        this.menuLinks = {
+        this.mainMenuLinks = {
             'Home':'/#/', 
             'อยากมีบ้าน':'/#/animalpage',
             'มีบ้านแล้ว':'/#/timeline',
-            'Popular':'/#/animalpage?type=popular',
+            'Popular':'/#/animalpage?type=popular',           
+        }
+        this.myMenuLinks = {           
             'Favorite':'/#/animalpage?type=favorite',
             'My Animal':'/#/animalpage?type=myanimal',
             'My Request':'/#/animalpage?type=myrequest',
             'My Adopted':'/#/animalpage?type=myadopted',
             'Notification':'/#/notification',
-            'My Profile':'/#/myprofile',
-            'ติดต่อเรา':'/#/contactus',
-            'ออกจากระบบ':'/#/login',
-        }
-        //this.menuLinks = ['/','/animal', '/Login']
+            'My Profile':'/#/myprofile',            
+        }    
     }
     
     handleItemClick(e, { name }) {
         this.setState({ activeItem: name, visible: false })
     }
 
-  toggleVisibility() {      
-      this.setState({ visible: !this.state.visible })
+    toggleVisibility() {      
+        this.setState({ visible: !this.state.visible })
+    }
+
+    hideVisibility() {      
+        if (this.state.visible) {
+            this.setState({ visible: false })
+        }
+    }
+
+    signOut() {
+        FirebaseUtil.signOut() 
+        this.setState({ activeItem: 'ออกจากระบบ', visible: false })
+    }
+
+    createMenuItems(menues) {
+        var thisObj = this  
+        var menuItems = []
+        const activeItem = this.state.activeItem
+        for(var page in menues) {        
+            if(menues.hasOwnProperty(page)) {
+                //menuItems.push(<Menu.Item key={page} name={page} onClick={this.handleItemClick.bind(thisObj, this.menuLinks[page])}></Menu.Item>)
+                menuItems.push(
+                    <Menu.Item key={page} name={page} href={menues[page]} onClick={this.handleItemClick.bind(thisObj)} active={activeItem === page}>
+                        {page}
+                    </Menu.Item>
+                )
+            }
+        }
+        return menuItems
+    }
+  
+    createDefaultMenuItems(){
+        var thisObj = this  
+        var menuItems = []
+        const activeItem = this.state.activeItem    
+        // Contact us
+        menuItems.push(
+            <Menu.Item key='ติดต่อเรา' name='ติดต่อเรา' href='/#/contactus' onClick={this.handleItemClick.bind(thisObj)} active={activeItem === 'ติดต่อเรา'}>
+                ติดต่อเรา
+            </Menu.Item>
+        )
+        // Authen 
+        if (this.props.isLoggedIn) {
+            menuItems.push(
+                <Menu.Item key='ออกจากระบบ' name='ออกจากระบบ' href='/#/login' onClick={this.signOut.bind(thisObj)} active={activeItem === 'ออกจากระบบ'}>
+                    ออกจากระบบ
+                </Menu.Item>
+            )
+        }
+        else {
+            menuItems.push(
+                <Menu.Item key='เข้าสู่ระบบ' name='เข้าสู่ระบบ' href='/#/login' onClick={this.handleItemClick.bind(thisObj)} active={activeItem === 'เข้าสู่ระบบ'}>
+                    เข้าสู่ระบบ
+                </Menu.Item>
+            )
+        }
+        return menuItems
     }
 
   render() {  
@@ -39,39 +96,30 @@ class Layout extends React.Component {
         'padding': '5px 10px',
         'color': '#ddd',
         'cursor': 'pointer'
-    };
+    }
 
     var headerStyle = {
         'margin': '0.6rem'        
-    };
-
-    var thisObj = this;
-    const visible  = this.state.visible
-    const activeItem = this.state.activeItem
-    var menuItems = [];
-    for(var page in this.menuLinks) {        
-        if(this.menuLinks.hasOwnProperty(page)) {
-            //menuItems.push(<Menu.Item key={page} name={page} onClick={this.handleItemClick.bind(thisObj, this.menuLinks[page])}></Menu.Item>);
-            menuItems.push(
-                <Menu.Item key={page} name={page} href={this.menuLinks[page]} onClick={this.handleItemClick.bind(thisObj)} active={activeItem === page}>
-                   {page}
-                </Menu.Item>
-                );
-        }
     }
-
-    return (           
+     
+    const visible  = this.state.visible   
+    const loggedIn = this.props.isLoggedIn 
+    return (      
         <div>  
             <div>
                 <Sidebar.Pushable as={Segment}>                    
                     <Sidebar as={Menu} animation='overlay' width='wide' visible={visible} icon='labeled' vertical inverted>
                         <div>
-                            <span id='close' style={closeStyle} onClick={this.toggleVisibility.bind(this)}>X</span>
+                            <span id='close' style={closeStyle} onClick={this.hideVisibility.bind(this)}>X</span>
                             <br/><br/><br/><br/>
                         </div>
-                        {menuItems}
+                        {this.createMenuItems(this.mainMenuLinks)} 
+                        <Divider hidden />
+                        {loggedIn ? this.createMenuItems(this.myMenuLinks) : null}                        
+                        {loggedIn ? <Divider hidden/> : null}
+                        {this.createDefaultMenuItems()}                     
                     </Sidebar>
-                    <Sidebar.Pusher>
+                    <Sidebar.Pusher onClick={this.hideVisibility.bind(this)}>
                         <div className="ui top attached menu">
                             <a className="item" onClick={this.toggleVisibility.bind(this)}>
                                 <i className="sidebar icon"></i>
@@ -93,7 +141,14 @@ class Layout extends React.Component {
   }
 }
 
-export default Layout
+const mapStateToProps = (store) => {
+    return {
+        isLoggedIn: store.authen,
+    }
+}
+
+export default connect(mapStateToProps)(Layout)
+//export default Layout
 // {this.menuLinks.map( page => 
                     //     //<Menu.Item key={page} name={page}><Link to={page}>{page}</Link></Menu.Item>
                     //      <Link key={page} to={page}> {page} </Link>
