@@ -21,12 +21,18 @@ class AnimalDetail extends React.Component {
                 .then( animal => {
                     const val = animal.val()
                     val.animalId = this.props.match.params.id
-                    if(val)
+                    if(val){
                         this.props.dispatch(actionCreator.endFetch(val))
-                    else
+                        const update = {}
+                        update[`animals/${this.props.match.params.id}/view`] = val.view+1
+                        this.database.ref().update(update)
+                    }else
                         this.props.dispatch(actionCreator.createNew())
                 })
-                .catch( e => this.props.dispatch(actionCreator.error('not found')) )
+                .catch( e =>{
+                    console.log(e)
+                    this.props.dispatch(actionCreator.error('not found'))
+                })
         }else{
             this.props.dispatch(actionCreator.createNew())
             console.log('eiei')
@@ -55,6 +61,14 @@ class AnimalDetail extends React.Component {
         return(
             <div className='ui container'>
                 <h1> {this.props.animalName} </h1>
+                <div className="ui labeled button" tabIndex="0">
+                    <div className="ui icon button">
+                        <i className="eye icon"></i>
+                    </div>
+                    <span className="ui basic label">
+                        {this.props.view}
+                    </span>
+                </div>
                 <div id='detail-images'>
                     { this.props.photoUrls.map( url => (<img key={url} src={url} alt='dog-image' />)) }
                 </div>
@@ -123,10 +137,18 @@ class AnimalDetail extends React.Component {
         }
         this.uploadImage(urls)
             .then( urls => {
+                const auth = firebase.auth()
                 const submitValue = {
                     animalName: $('#name').val(),
                     animalType: $('#type').val(),
-                    owner: firebase.auth().currentUser.uid,
+                    owner: {
+                        id: auth.currentUser.uid,
+                        displayanme: auth.currentUser.displayName,
+                        email: auth.currentUser.email,
+                        photo: auth.currentUser.photoURL,
+                    },
+                    status: 'Open',
+                    view: 0,
                     breed: $('#breed').val(),
                     gender: $('#gender').val(),
                     location: $('#location').val(),
@@ -174,8 +196,10 @@ const mapStateToProps = (store) => {
         gender: store.currentAnimal.gender,
         foundLocation: store.currentAnimal.location,
         geo: store.currentAnimal.geo || { lat: 13.7563, lng: 100.5018 },
-        contact: store.currentAnimal.contact || (store.authen && firebase.auth().currentUser.email),
+        contact: store.currentAnimal.owner && store.currentAnimal.owner.email || (store.authen && firebase.auth().currentUser.email),
         animalDescription: store.currentAnimal.description,
+        status: store.currentAnimal.status,
+        view: store.currentAnimal.view
     }
 }
 
