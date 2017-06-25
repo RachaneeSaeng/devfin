@@ -11,8 +11,8 @@ class Layout extends React.Component {
         super()
         this.mainMenuLinks = {
             'Home':'/#/', 
-            'อยากมีบ้าน':'/#/animalpage/Open',
-            'มีบ้านแล้ว':'/#/animalpage/Adopted',
+            'Need Home':'/#/animalpage/Open',
+            'Have Home':'/#/animalpage/Adopted',
             'Popular':'/#/animalpage/Open?sort=view',           
         }
         this.myMenuLinks = {           
