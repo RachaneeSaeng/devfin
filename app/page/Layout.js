@@ -16,7 +16,7 @@ class Layout extends React.Component {
             'Popular':'/#/animalpage/popular',           
         }
         this.myMenuLinks = {           
-            'Favorite':'/#/animalpage/favorite',
+            'My Favorite':'/#/animalpage/favorite',
             'My Animal':'/#/animalpage/myanimal',
             'My Request':'/#/animalpage/myrequest',
             'My Adopted':'/#/animalpage/myadopted',            
@@ -74,12 +74,12 @@ class Layout extends React.Component {
         var thisObj = this  
         var menuItems = []
         const activeItem = this.state.activeItem    
-        // Contact us
-        menuItems.push(
-            <Menu.Item key='ติดต่อเรา' name='ติดต่อเรา' href='/#/contactus' onClick={this.handleItemClick.bind(thisObj)} active={activeItem === 'ติดต่อเรา'}>
-                ติดต่อเรา
-            </Menu.Item>
-        )
+        // // Contact us
+        // menuItems.push(
+        //     <Menu.Item key='ติดต่อเรา' name='ติดต่อเรา' href='/#/contactus' onClick={this.handleItemClick.bind(thisObj)} active={activeItem === 'ติดต่อเรา'}>
+        //         ติดต่อเรา
+        //     </Menu.Item>
+        // )
         // Authen 
         if (this.props.isLoggedIn) {
             menuItems.push(

@@ -61,3 +61,7 @@ header div img {
     padding: 2px 2px;
     margin: 5px;
 }
+
+.float-right {
+  float: right;
+}

@@ -6,6 +6,7 @@ import * as actionCreator from '../redux/action/currentAnimal'
 import GoogleMapReact  from 'google-map-react'
 
 import {LabeledInput, Button, AnimalMarker} from '../component/ui'
+import AdoptButton from '../component/AdoptButton'
 import Camera from '../component/Camera'
 import ImagePicker from '../component/ImagePicker'
 
@@ -54,6 +55,7 @@ class AnimalDetail extends React.Component {
         }
         return(
             <div className='ui container'>
+                <AdoptButton parentPage={this}/>
                 <h1> {this.props.animalName} </h1>
                 <div id='detail-images'>
                     { this.props.photoUrls.map( url => (<img key={url} src={url} alt='dog-image' />)) }
