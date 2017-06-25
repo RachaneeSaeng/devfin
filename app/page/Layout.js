@@ -65,7 +65,7 @@ class Layout extends React.Component {
         return (
             <Menu.Item key='Notification' name='Notification' href='/#/notification' onClick={this.handleItemClick.bind(thisObj)} active={activeItem === 'Notification'}>
                 Notification
-                {'  '}<span className="notification">{this.props.notiCount}</span>
+                {'  '}{this.props.notiCount == 0 ? null : <span className="notification">{this.props.notiCount}</span>}
             </Menu.Item>
         )
     }

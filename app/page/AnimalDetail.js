@@ -148,6 +148,7 @@ class AnimalDetail extends React.Component {
                         displayname: auth.currentUser.displayName,
                         email: auth.currentUser.email,
                         photo: auth.currentUser.photoURL,
+                        contact: $('#contact').val(),
                     },
                     status: 'Open',
                     view: 0,
@@ -155,8 +156,7 @@ class AnimalDetail extends React.Component {
                     gender: $('#gender').val(),
                     location: $('#location').val(),
                     geo: {lat: parseFloat($('#lat').val()), lng: parseFloat($('#lng').val())},
-                    description: $('#description').val(),
-                    contact: $('#contact').val(),
+                    description: $('#description').val(),                    
                     photo_urls: urls.concat(this.props.photoUrls),
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
                 }
