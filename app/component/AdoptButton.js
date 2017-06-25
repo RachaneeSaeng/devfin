@@ -25,16 +25,16 @@ class AdoptButton extends React.Component{
         // Save data to database
         const newNotiKey = firebase.database().ref().child('notification').push().key;
         const requestor = firebase.auth().currentUser
-        //const ownerId = this.parent.props.ownerId
-        const ownerId = firebase.auth().currentUser.uid
-        // var requesterNoti = {
-        //     animalId: this.parent.props.animalId,
-        //     actorName: this.parent.props.ownerDisplayName,
-        //     actorEmail: this.parent.props.ownerEmail,
-        //     actorPhotoUrl: his.parent.props.ownerPhotoURL,            
-        //     notiType: 'Pending',
-        //     timestamp: firebase.database.ServerValue.TIMESTAMP,
-        // }; 
+        const owner = this.props.owner
+
+        var requesterNoti = {
+            animalId: this.props.animalId,
+            actorName: this.props.owner.displayName,
+            actorEmail: this.props.owner.email,
+            actorPhotoUrl: this.props.owner.photo,            
+            notiType: 'Pending',
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+        }; 
         var ownerNoti = {
             animalId: this.parent.props.animalId,
             actorName: requestor.displayName,
@@ -45,8 +45,8 @@ class AdoptButton extends React.Component{
         };    
          // Get a key for a new Post.    
         var updates = {};         
-        //updates[`/notification/${requestor.uid}/${newNotiKey}`] = requesterNoti;  
-        updates[`/notification/${ownerId}/${newNotiKey}`] = ownerNoti;      
+        updates[`/notification/${requestor.uid}/${newNotiKey}`] = requesterNoti;  
+        updates[`/notification/${owner.id}/${newNotiKey}`] = ownerNoti;      
         firebase.database().ref().update(updates);
     }
 
@@ -72,6 +72,8 @@ class AdoptButton extends React.Component{
 const mapStateToProps = (store) => {
     return {
         isLoggedIn: store.authen,
+        animalId: store.currentAnimal.animalId,
+        owner: store.currentAnimal.owner
     }
 }
 
