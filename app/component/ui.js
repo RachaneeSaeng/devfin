@@ -1,6 +1,6 @@
 import React from 'react'
 
-const LabeledInput = ({label, type, disabled, placeholder, defaultValue, value}) => (
+export const LabeledInput = ({label, type, disabled, placeholder, defaultValue, value}) => (
     <div className='ui labeled input'>
         <div className='ui label'>
             {label}
@@ -9,10 +9,12 @@ const LabeledInput = ({label, type, disabled, placeholder, defaultValue, value})
     </div>
 )
 
-const Button = ({className, hidden, onClick, children}) => (
+export const Button = ({className, hidden, onClick, children}) => (
     <button className={`ui button ${className}`} style={{display:hidden?'none':''}} onClick={onClick}>
         {children}
     </button>
 )
 
-export {LabeledInput, Button}
+export const AnimalMarker = ({img}) => (
+    <img src={img} style={{borderRadius: '50%', border: 'green solid', width:48, height: 48}} />
+)

@@ -3,8 +3,9 @@ import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
 import * as firebase from 'firebase'
 import * as actionCreator from '../redux/action/currentAnimal'
+import GoogleMapReact  from 'google-map-react'
 
-import {LabeledInput, Button} from '../component/ui'
+import {LabeledInput, Button, AnimalMarker} from '../component/ui'
 import Camera from '../component/Camera'
 import ImagePicker from '../component/ImagePicker'
 
@@ -28,6 +29,14 @@ class AnimalDetail extends React.Component {
                 .catch( e => this.props.dispatch(actionCreator.error('not found')) )
         }else{
             this.props.dispatch(actionCreator.createNew())
+            console.log('eiei')
+            navigator.geolocation.getCurrentPosition( pos => {
+                console.log(pos)
+                this.props.dispatch(actionCreator.updateLocation({
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude
+                }))
+            })
         }
     }
 
@@ -54,16 +63,31 @@ class AnimalDetail extends React.Component {
                     <i className='ui icon camera'></i>
                 </Button>
                 {this.props.capture?<Camera />:null}
-                <Button hidden={!this.props.edit}>
-                    <i className='ui icon pin'></i>
-                </Button>
                 <div id='detail-body'>
                     <LabeledInput label='name' type='text' disabled={!this.props.edit} placeholder='เจ้าด่าง' defaultValue={this.props.animalName} />
                     <LabeledInput label='type' type='text' disabled={!this.props.edit} placeholder='หมา' defaultValue={this.props.animalType} />
                     <LabeledInput label='breed' type='text' disabled={!this.props.edit} placeholder='ไซบีเรียน ฮัสกี้' defaultValue={this.props.breed}/>
                     <LabeledInput label='gender' type='text' disabled={!this.props.edit} placeholder='ผู้' defaultValue={this.props.gender}/>
+                    <LabeledInput label='location' type='text' disabled={!this.props.edit} placeholder='มาบุญครอง' defaultValue={this.props.foundLocation}/>
+                    <div className='ui labeled input'>
+                        <div className='ui label'>
+                            <i className='icon pin'></i>
+                        </div>
+                        <input id='lat' type='number' disabled value={this.props.geo.lat}/>
+                        <input id='lng' type='number' disabled value={this.props.geo.lng}/>
+                    </div>
                     <LabeledInput label='contact' type='text' disabled={true} value={this.props.contact}/>
                     <LabeledInput label='description' type='text' disabled={!this.props.edit} placeholder='รายละเอียดอื่นๆ เช่น ขนยาว, น้องมีแผล, กลัวคน ผอมมาก' defaultValue={this.props.animalDescription} />
+                    <div style={{height:'30vh'}}>
+                        <GoogleMapReact
+                            defaultCenter={
+                                {lat: this.props.geo.lat, lng: this.props.geo.lng}
+                            }
+                            defaultZoom={13}
+                        > 
+                            <AnimalMarker img={this.props.photoUrls && this.props.photoUrls[0] || '/image/shelter32.png'} lat={this.props.geo.lat} lng={this.props.geo.lng} text={this.props.animalName}/>
+                        </GoogleMapReact>
+                    </div>
                 </div>
                 <div className='ui buttongroup'>
                     <Button hidden={this.props.edit} onClick={this.beginEdit.bind(this)}> Edit </Button>
@@ -77,7 +101,6 @@ class AnimalDetail extends React.Component {
     uploadImage(data_urls){
         const promises = []
         data_urls.map( i => {
-            console.log(i)
             const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 const r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8)
                 return v.toString(16)
@@ -106,7 +129,8 @@ class AnimalDetail extends React.Component {
                     owner: firebase.auth().currentUser.uid,
                     breed: $('#breed').val(),
                     gender: $('#gender').val(),
-                    location: { lat: 13.7563, lng: 100.5018 },
+                    location: $('#location').val(),
+                    geo: {lat: parseFloat($('#lat').val()), lng: parseFloat($('#lng').val())},
                     description: $('#description').val(),
                     contact: $('#contact').val(),
                     photo_urls: urls.concat(this.props.photoUrls),
@@ -149,6 +173,7 @@ const mapStateToProps = (store) => {
         breed: store.currentAnimal.breed,
         gender: store.currentAnimal.gender,
         foundLocation: store.currentAnimal.location,
+        geo: store.currentAnimal.geo || { lat: 13.7563, lng: 100.5018 },
         contact: store.currentAnimal.contact || (store.authen && firebase.auth().currentUser.email),
         animalDescription: store.currentAnimal.description,
     }

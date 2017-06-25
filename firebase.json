@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "package.json",
+      "README.md",
+      "webpack.config.js",
+      "yarn.lock",
+      "**/.*",
+      "**/app/**",
+      "**/node_modules/**"
+    ]
+  }
+}
