@@ -51,7 +51,8 @@ class Notification extends React.Component {
                             }                         
                         })
                     });
-                }            
+                } 
+                this.setState({loading: false})           
             });
         }
     }
@@ -82,6 +83,10 @@ class Notification extends React.Component {
         updates[`/notification/${firebase.auth().currentUser.uid}/${noti.id}`] = null;
 
         firebase.database().ref().update(updates);
+
+        //update state
+        this.state.notifications.remove(this.state.notiIndex);
+        thisObj.setState({notifications: this.state.notifications});
     }
     cancelApprove() {
         this.setState({openApprove: false})        
@@ -96,6 +101,9 @@ class Notification extends React.Component {
         updates[`/notification/${firebase.auth().currentUser.uid}/${noti.id}`] = null;
 
         firebase.database().ref().update(updates);
+        //update state
+        this.state.notifications.remove(this.state.notiIndex);
+        thisObj.setState({notifications: this.state.notifications});
     }
 
     okHandler(notiIndex) {
@@ -104,6 +112,9 @@ class Notification extends React.Component {
         // clear notification
         updates[`/notification/${firebase.auth().currentUser.uid}/${noti.id}`] = null;
         firebase.database().ref().update(updates);
+        //update state
+        this.state.notifications.remove(this.state.notiIndex);
+        thisObj.setState({notifications: this.state.notifications});
     }
 
     render() { 

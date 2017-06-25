@@ -18,7 +18,6 @@ class Layout extends React.Component {
         this.myMenuLinks = {           
             // 'My Favorite':'/#/animalpage/favorite',
             'My Animal':'/#/animalpage/Open?by=me',
-            'My Request':'/#/animalpage/Requested?by=me',
             'My Adopted':'/#/animalpage/Adopted?by=me',
         }    
     }
@@ -65,7 +64,7 @@ class Layout extends React.Component {
         return (
             <Menu.Item key='Notification' name='Notification' href='/#/notification' onClick={this.handleItemClick.bind(thisObj)} active={activeItem === 'Notification'}>
                 Notification
-                {'  '}<span className="notification">{this.props.notiCount}</span>
+                {'  '}{this.props.notiCount == 0 ? null : <span className="notification">{this.props.notiCount}</span>}
             </Menu.Item>
         )
     }

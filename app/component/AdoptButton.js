@@ -56,19 +56,29 @@ class AdoptButton extends React.Component{
         this.setState({openAdopt: false })        
     }
 
-    render() {              
-        return (  
-            <div>
-                <Button primary className='float-right' onClick={this.adoptAnimal.bind(this)}>Adopt</Button>
-                 <Confirm
-                    content='คุณต้องการรับสัตว์ตัวนี้ไปเลี้ยงใช่ไหม? หากคุณกดตกลง เราจะส่งคำขอของคุณไปยังผู้โพส.'
-                    confirmButton='ตกลง' cancelButton='ยกเลิก' 
-                    open={this.state.openAdopt}
-                    onCancel={this.cancelAdopt.bind(this)}
-                    onConfirm={this.confirmAdopt.bind(this)}
-                    />
-            </div>  
-        )
+    canAdopt() {
+        return true;
+    }
+
+    render() {  
+        if (this.canAdopt) {
+            return (  
+                <div>
+                    <Button primary className='float-right' onClick={this.adoptAnimal.bind(this)}>Adopt</Button>
+                    <Confirm
+                        content='คุณต้องการรับสัตว์ตัวนี้ไปเลี้ยงใช่ไหม? หากคุณกดตกลง เราจะส่งคำขอของคุณไปยังผู้โพส.'
+                        confirmButton='ตกลง' cancelButton='ยกเลิก' 
+                        open={this.state.openAdopt}
+                        onCancel={this.cancelAdopt.bind(this)}
+                        onConfirm={this.confirmAdopt.bind(this)}
+                        />
+                </div>  
+            )
+        }  
+        else (
+            retun (null)
+        )         
+        
     }
 }
 const mapStateToProps = (store) => {
