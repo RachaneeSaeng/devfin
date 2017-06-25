@@ -6,7 +6,7 @@ import * as firebase from 'firebase'
 import FirebaseUtil from '../../script/FirebaseUtil'
 
 class Notification extends React.Component {
-    state = {loading: true, notifications: [], openApprove: false, notikey: ''}
+    state = {loading: true, notifications: [], openApprove: false, notiIndex: ''}
 
     componentDidMount() {
         if (this.props.isLoggedIn) {
@@ -23,42 +23,46 @@ class Notification extends React.Component {
     queryNotification() {
         var thisObj = this  
         var my =firebase.auth().currentUser.uid
-        firebase.database().ref(`notification/${firebase.auth().currentUser.uid}`).once('value').then(snap => {                
-            var notiObj = snap.val();
+        if (this.state.notifications.length == 0) {
+            firebase.database().ref(`notification/${firebase.auth().currentUser.uid}`).once('value').then(snap => {                
+                var notiObj = snap.val();
 
-            if (notiObj) {
-                const notiIds = Object.keys(notiObj);            
-                notiIds.forEach((item) => {
-                    FirebaseUtil.getAnimalDetail(notiObj[item].animalId).then(result => {
-                        this.state.notifications.push({
-                            id: item,            
-                            animalName: result.animalName,
-                            animalPhotoUrl: result.photo_urls[0],
-                            animalLocation: result.location,
-                            animalDesc: result.description,
-                            actorName: notiObj[item].actorName,
-                            actorEmail: notiObj[item].actorEmail,
-                            actorPhotoUrl: notiObj[item].actorPhotoUrl,
-                            timestamp: notiObj[item].timestamp,
-                            notiType: notiObj[item].notiType
-                        }) 
-                        if (this.state.notifications.length == notiIds.length) {
-                            this.setState({loading: false})
-                            thisObj.setState({notifications: this.state.notifications}); 
-                        }                         
-                    })
-                });
-            }            
-        });
+                if (notiObj) {
+                    const notiIds = Object.keys(notiObj);            
+                    notiIds.forEach((item) => {
+                        FirebaseUtil.getAnimalDetail(notiObj[item].animalId).then(result => {
+                            this.state.notifications.push({
+                                id: item,   
+                                animalId: notiObj[item].animalId,       
+                                animalName: result.animalName,
+                                animalPhotoUrl: result.photo_urls[0],
+                                animalLocation: result.location,
+                                animalDesc: result.description,
+                                actorId: notiObj[item].actorId,
+                                actorName: notiObj[item].actorName,
+                                actorEmail: notiObj[item].actorEmail,
+                                actorPhotoUrl: notiObj[item].actorPhotoUrl,
+                                timestamp: notiObj[item].timestamp,
+                                notiType: notiObj[item].notiType
+                            }) 
+                            if (this.state.notifications.length == notiIds.length) {
+                                this.setState({loading: false})
+                                thisObj.setState({notifications: this.state.notifications}); 
+                            }                         
+                        })
+                    });
+                }            
+            });
+        }
     }
 
-    approveHandler(notiKey) {
+    approveHandler(notiIndex) {
         // confirm approve        
-        this.setState({openApprove: true, nottikey: notiKey})   
+        this.setState({openApprove: true, notiIndex: notiIndex})   
     }
     confirmApprove() {
         this.setState({openApprove: false})     
-        var noti = this.state.notifications[this.state.notikey];        
+        var noti = this.state.notifications[this.state.notiIndex];        
         var updates = {} 
 
         // changeOwner to requestor 
@@ -72,10 +76,10 @@ class Notification extends React.Component {
         updates[`/animals/${noti.animalId}/owner`] = newOwner;
 
         // Update pending of requestor to be approved        
-        updates[`/notification/${noti.actorId}/${this.state.notikey}/notiType`] = 'Approved';
+        updates[`/notification/${noti.actorId}/${noti.id}/notiType`] = 'Approved';
 
         // remove noti from owner
-        updates[`/notification/${firebase.auth().currentUser.uid}/${this.state.notikey}`] = null;
+        updates[`/notification/${firebase.auth().currentUser.uid}/${noti.id}`] = null;
 
         firebase.database().ref().update(updates);
     }
@@ -83,21 +87,22 @@ class Notification extends React.Component {
         this.setState({openApprove: false})        
     }
 
-    rejectHandler(notiKey) {
-        var noti = this.state.notifications[notikey];        
+    rejectHandler(notiIndex) {
+        var noti = this.state.notifications[notiIndex];        
         var updates = {} 
         // Update pending of requetor to be rejected
-        updates[`/notification/${noti.actorId}/${notiKey}/notiType`] = 'Rejected';
+        updates[`/notification/${noti.actorId}/${noti.id}/notiType`] = 'Rejected';
         // remove noti from owner
-        updates[`/notification/${firebase.auth().currentUser.uid}/${notiKey}`] = null;
+        updates[`/notification/${firebase.auth().currentUser.uid}/${noti.id}`] = null;
 
         firebase.database().ref().update(updates);
     }
 
-    okHandler(notiKey) {
+    okHandler(notiIndex) {
+        var noti = this.state.notifications[notiIndex]; 
         var updates = {}; 
         // clear notification
-        updates[`/notification/${firebase.auth().currentUser.uid}/${notiKey}`] = null;
+        updates[`/notification/${firebase.auth().currentUser.uid}/${noti.id}`] = null;
         firebase.database().ref().update(updates);
     }
 
@@ -111,25 +116,27 @@ class Notification extends React.Component {
         return (    
             <div>   
                 <Divider horizontal>Your Animal Request</Divider>
-                {this.state.notifications.filter(noti => noti.notiType == 'Request').map(noti =>
-                    <Segment key={noti.id} >
+                {this.state.notifications.filter(noti => noti.notiType == 'Request').map((noti, index) =>
+                    <Segment key={index} >
                         <Header as='h3' textAlign='center'>Animal Request</Header>
                         <NotiCard carddata={noti}/>
                         <div className='text-center comfort-mergin'>
-                            <Button primary onClick={() => this.approveHandler(noti.id)}>Approve</Button>{'   '}
-                            <Button secondary onClick={() => this.rejectHandler(noti.id)}>Reject</Button>
+                            <Button primary onClick={() => this.approveHandler(index)}>Approve</Button>{'   '}
+                            <Button secondary onClick={() => this.rejectHandler(index)}>Reject</Button>
                         </div>
                     </Segment>
                 )}   
                 <br/>
                 <Divider horizontal>Your Adoption Request</Divider>
-                {this.state.notifications.filter(noti => noti.notiType != 'Request').map(noti =>                    
-                    <Segment key={noti.id} >
+                {this.state.notifications.filter(noti => noti.notiType != 'Request').map((noti, index) =>                    
+                    <Segment key={index} >
                         <Header as='h3' textAlign='center' color={noti.notiType == 'Pending' ? 'yellow' : noti.notiType == 'Approved' ? 'green': 'red'}>{noti.notiType}</Header>
                         <NotiCard carddata={noti}/>
-                        <div className='text-center comfort-mergin'>
-                            <Button primary onClick={() => this.okHandler(noti.id)}>OK</Button>                            
-                        </div>
+                        {noti.notiType == 'Pending' ? null :
+                            <div className='text-center comfort-mergin'>
+                                <Button primary onClick={() => this.okHandler(index)}>OK</Button>                            
+                            </div>
+                        }                        
                     </Segment>
                 )} 
                 <Confirm

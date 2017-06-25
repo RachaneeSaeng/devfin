@@ -29,15 +29,17 @@ class AdoptButton extends React.Component{
 
         var requesterNoti = {
             animalId: this.props.animalId,
-            actorName: this.props.owner.displayName,
-            actorEmail: this.props.owner.email,
-            actorPhotoUrl: this.props.owner.photo,            
+            actorId: owner.id,
+            actorName: owner.displayName,
+            actorEmail: owner.email,
+            actorPhotoUrl: owner.photo,            
             notiType: 'Pending',
             timestamp: firebase.database.ServerValue.TIMESTAMP,
         }; 
         var ownerNoti = {
             animalId: this.parent.props.animalId,
-            actorName: requestor.displayName,
+            actorId: requestor.uid,
+            actorName: requestor.displayName,            
             actorEmail: requestor.email,
             actorPhotoUrl: requestor.photoURL,            
             notiType: 'Request',
