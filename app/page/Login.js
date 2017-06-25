@@ -42,7 +42,7 @@ class Login extends React.Component {
     render(){      
         return (
             <div className='ui container'>               
-                <div id="loaded" className="hidden">
+                <div id="loaded">
                     <div id="main">
                         <div id="firebaseui-container"></div>                                                
                     </div>
