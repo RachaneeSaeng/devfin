@@ -12,7 +12,7 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        Promise.all([FirebaseUtil.getDogs()]).then(function (dogArr) {
+        Promise.all([FirebaseUtil.getAnimals()]).then(function (dogArr) {
             this.props.dispatch(addAnimal(dogArr[0]));
         }.bind(this), function (err) {
             // error occurred

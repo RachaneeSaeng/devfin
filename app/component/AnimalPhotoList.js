@@ -13,6 +13,8 @@ class AnimalPhotoList extends React.Component {
                     switch (this.props.sortingBy) {
                         case 'time':
                             return this.props.animals.sort(compareTimeStamp).map(d => <AnimalPhoto key={d.id} url={d.photo_urls[0]} />)
+                        case 'views':
+                            return this.props.animals.sort(compareViews).map(d => <AnimalPhoto key={d.id} url={d.photo_urls[0]} />)
                         default:
                             null
                     }
@@ -28,10 +30,18 @@ const AnimalPhoto = ({ url }) => (
 )
 
 
-function compareTimeStamp() {
+function compareTimeStamp(a,b) {
     if (a.timestamp < b.timestamp)
         return -1;
     if (a.timestamp > b.timestamp)
+        return 1;
+    return 0;
+}
+
+function compareViews(a,b) {
+    if (a.views < b.views)
+        return -1;
+    if (a.views > b.views)
         return 1;
     return 0;
 }

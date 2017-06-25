@@ -58,7 +58,7 @@ class FirebaseUtil {
     })
   }
 
-  static getDogs() {
+  static getAnimals() {
     return firebase.database().ref('animals/').once('value').then(function (snapshot) {
       var animalArr = [];
       var animalObj = snapshot.val();
@@ -74,12 +74,22 @@ class FirebaseUtil {
         animalArr.push(
           {
             id: item,
-            name: animalObj[item].name,
-            type: animalObj[item].type,
+            animalName: animalObj[item].animalName,
+            animalType: animalObj[item].animalType,
+            breed: animalObj[item].breed,
+            description: animalObj[item].description,
+            gender: animalObj[item].gender,
+            latitude: animalObj[item].geo.lat,
+            longtitude: animalObj[item].geo.long,
+            location: animalObj[item].location,
+            owner_id: animalObj[item].owner.id,
+            owner_displayname: animalObj[item].owner.displayname,
+            owner_email: animalObj[item].owner.email,
+            owner_photo: animalObj[item].owner.photo,
             photo_urls: photourls,
             views: animalObj[item].views ? animalObj[item].views : 0,
-            owner: animalObj[item].owner,
-            timestamp: animalObj[item].timestamp
+            timestamp: animalObj[item].timestamp,
+            status: animalObj[item].status
           }
         )
       });
