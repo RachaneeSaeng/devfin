@@ -2,6 +2,7 @@ import {
     BEGIN_FETCH, END_FETCH,
     BEGIN_EDIT, END_EDIT,
     BEGIN_CAPTURE, END_CAPTURE,
+    UPDATE_LOCATION,
     CREATE_NEW, ERROR
 } from '../action/currentAnimal'
 
@@ -17,7 +18,7 @@ const init = {
     views: 0,
     breed: null,
     gender: null,
-    geo: { lat: 13.7563, lng: 100.5018 },
+    geo: null,
     location: null,
     status: null,
     contact: null,
@@ -34,6 +35,7 @@ const currentAnimal = (state = init, action) => {
         case BEGIN_CAPTURE: return {...state, isCapturing: true, isPicking: false}
         case END_CAPTURE: return {...state, isCapturing: false}
         case CREATE_NEW: return {...init}
+        case UPDATE_LOCATION: return {...state, geo:action.geo}
         case ERROR: return {...init, error: action.reason}
         default: return state
     }
