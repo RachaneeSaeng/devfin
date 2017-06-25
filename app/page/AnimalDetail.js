@@ -155,11 +155,7 @@ class AnimalDetail extends React.Component {
                     gender: $('#gender').val(),
                     location: $('#location').val(),
                     geo: {lat: parseFloat($('#lat').val()), lng: parseFloat($('#lng').val())},
-<<<<<<< HEAD
                     description: $('#description').val(),
-=======
-                    description: $('#description').val(),                    
->>>>>>> eb8ee3b61d1987fe4d552ae5567bc0b38f131670
                     photo_urls: urls.concat(this.props.photoUrls),
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
                 }
