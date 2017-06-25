@@ -59,7 +59,7 @@ class FirebaseUtil {
   }
 
   static getDogs() {
-    return firebase.database().ref('dogs/').once('value').then(function (snapshot) {
+    return firebase.database().ref('animals/').once('value').then(function (snapshot) {
       var animalArr = [];
       var animalObj = snapshot.val();
       const animalIds = Object.keys(animalObj);
