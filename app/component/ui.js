@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 export const LabeledInput = ({label, type, disabled, placeholder, defaultValue, value}) => (
     <div className='ui labeled input'>
@@ -17,4 +18,12 @@ export const Button = ({className, hidden, onClick, children}) => (
 
 export const AnimalMarker = ({img}) => (
     <img src={img} style={{borderRadius: '50%', border: 'green solid', width:48, height: 48}} />
+)
+
+export const AnimalMarkerWithLink = ({img, onClick}) => (
+    <img
+        src={img}
+        style={{borderRadius: '50%', border: 'green solid', width:48, height: 48, cursor:'pointer'}}
+        onClick={onClick}
+    />
 )
