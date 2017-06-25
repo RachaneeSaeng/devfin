@@ -1,9 +1,12 @@
 import React from 'react'
+import {withRouter} from 'react-router'
 import GoogleMapReact  from 'google-map-react'
 import AnimalList from '../component/AnimalList'
 import {connect} from 'react-redux'
+import * as firebase from 'firebase'
 
-const CustomMarker = ({ text }) => <div className='markerCss'><b className='textCss'>{text}</b></div>;
+import * as actionCreator from '../redux/action/animal'
+import {AnimalMarkerWithLink} from '../component/ui'
 
 class AnimalPage extends React.Component{
     constructor(){
@@ -14,24 +17,11 @@ class AnimalPage extends React.Component{
             CenterLat: 0,
             CenterLng: 0,
         }
-
-        this.Loc1 = {name: 'Place1', lat: 13.746108, lng: 100.539240}
-        this.Loc2 = {name: 'Place2', lat: 13.746088, lng: 100.534355}
-        this.Loc3 = {name: 'Place3', lat: 13.744468, lng: 100.529909}
-        this.Loc4 = {name: 'Place4', lat: 13.738378, lng: 100.532053}
-        this.Loc5 = {name: 'Place5', lat: 13.788417, lng: 100.605331}
-
-        this.state.LocList.push(this.Loc1)
-        this.state.LocList.push(this.Loc2)
-        this.state.LocList.push(this.Loc3)
-        this.state.LocList.push(this.Loc4)
-        this.state.LocList.push(this.Loc5)
     }
 
     PerformSearch(){
-        var text = $('#search-text-box').val();
-
-        //perform search and set state
+        const text = $('#search-text-box').val();
+        
     }
 
     ChangeMode(m) {
@@ -67,6 +57,14 @@ class AnimalPage extends React.Component{
     }
 
     componentDidMount(){
+        const animals = firebase.database().ref('animals')
+        this.props.dispatch(actionCreator.resetAnimal())
+        const status = this.props.match.params.type || 'Open'
+        animals.orderByChild('status').equalTo(status).on('child_added',
+            r => {
+                this.props.dispatch(actionCreator.addAnimal({key:r.key, ...(r.val())}))
+            })
+
         if(this.state.mode == 1)
         {
             $('#search-mode-card').prop('checked', true);
@@ -76,32 +74,34 @@ class AnimalPage extends React.Component{
     render(){ 
 
         if(this.state.mode == 2){
+            const cenLat = this.props.animals.map( a => a.geo.lat).reduce((p, c) => p+c) / this.props.animals.length
+            const cenLng = this.props.animals.map( a => a.geo.lng).reduce((p, c) => p+c) / this.props.animals.length
             return (
                 <div className='ui container'>
-                    <div id='search-control' className='searchControlCss'>
-                        <form onSubmit={this.PerformSearch.bind(this)}>
-                            <input id='search-text-box' type='text' className='searchTextBox' placeholder='Search...'/>
-                        </form>
-                        <div>
-                            <input id='search-mode-card' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 1)} className='radioCss'/><label className='labelCss'>View by Card</label>
-                            <input id='search-mode-map' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 2)} className='radioCss'/><label className='labelCss'>View By Map</label>
-                        </div>                    
+                    <div className='ui icon buttons'>
+                        <button className={'ui button '+(this.state.mode==1?'orange':'')} onClick={()=>{this.setState({mode:1})}}>
+                            <i className={'eye icon '+(this.state.mode==1?'white':'')} />
+                        </button>
+                        <button className={'ui button '+(this.state.mode==2?'orange':'')} onClick={()=>{this.setState({mode:2})}}>
+                            <i className={'map icon '+(this.state.mode==2?'white':'')} />
+                        </button>
                     </div>
 
-                    <div id='map-mode' >
+                    <div id='map-mode' style={{height:'75vh'}}>
                         <GoogleMapReact
-                            defaultCenter={
-                                {lat: this.state.CenterLat, lng: this.state.CenterLng}
-                            }
-                            defaultZoom={13}
+                            defaultCenter={{lat: cenLat, lng: cenLng}}
+                            defaultZoom={8}
                             > 
                         { 
-                            this.state.LocList.map((loc) =>
-                                <CustomMarker
-                                    lat={loc.lat}
-                                    lng={loc.lng}
-                                    text={loc.name} />
-                            )          
+                            this.props.animals.map( a =>
+                                <AnimalMarkerWithLink
+                                    key={a.key}
+                                    lat={a.geo.lat}
+                                    lng={a.geo.lng}
+                                    onClick={()=>{this.props.history.push('/animaldetail/' + a.key)}}
+                                    img={a.photo_urls[0] || '/image/shelter32.png'}
+                                />
+                            )
                         }
                         </GoogleMapReact>
                     </div>
@@ -109,50 +109,19 @@ class AnimalPage extends React.Component{
             )
         }   
         else{
+            console.log(this.state.mode)
             return(
                 <div className='ui container'>
-                    <div id='search-control' className='searchControlCss'>
-                        <form onSubmit={this.PerformSearch.bind(this)}>
-                            <input id='search-text-box' type='text' className='searchTextBox' placeholder='Search...'/>
-                        </form>
-                        <div>
-                            <input id='search-mode-card' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 1)} className='radioCss'/><label className='labelCss'>View by Card</label>
-                            <input id='search-mode-map' type='radio' name='mode' onClick={this.ChangeMode.bind(this, 2)} className='radioCss'/><label className='labelCss'>View By Map</label>
-                        </div>                    
+                    <div className='ui icon buttons'>
+                        <button className={'ui button '+(this.state.mode==1?'orange':'')} onClick={()=>{this.setState({mode:1})}}>
+                            <i className={'eye icon '+(this.state.mode==1?'white':'')} />
+                        </button>
+                        <button className={'ui button '+(this.state.mode==2?'orange':'')} onClick={()=>{this.setState({mode:2})}}>
+                            <i className={'map icon '+(this.state.mode==2?'white':'')} />
+                        </button>
                     </div>
                     <div>
-                        <AnimalList />   
-                        <table className='tableCss'>
-                            <tr className='cardContainerCss'>
-                                <td className='cardPartialLeftCss' align='left'>
-                                    <img src='http://images.shibashake.com/wp-content/blogs.dir/7/files/2010/03/IMG_2431-520x390.jpg' className='imgCss'/>
-                                </td>
-                                <td className='cardPartialRightCss' align='right'>
-                                    <div className='textLineCss'><label>ชื่อ: </label> John</div>
-                                    <div className='textLineCss'><label>อายุ: </label> 8</div>
-                                    <div className='textLineCss'><label>เพศ: </label> ผู้</div>
-                                    <div className='textLineCss'><label>สถานที่: </label> บางกะปิ</div>                                   
-                                </td>
-                                <td className='cardPartialIcon'>
-                                    <i className='empty star icon favIcon' fontSize='8em'></i>
-                                </td>
-                            </tr>
-
-                            <tr className='cardContainerCss'>
-                                <td className='cardPartialLeftCss' align='left'>
-                                    <img src='http://images.shibashake.com/wp-content/blogs.dir/7/files/2010/03/IMG_2431-520x390.jpg' className='imgCss'/>
-                                </td>
-                                <td className='cardPartialRightCss' align='right'>
-                                    <div className='textLineCss'><label>ชื่อ: </label> John</div>
-                                    <div className='textLineCss'><label>อายุ: </label> 8</div>
-                                    <div className='textLineCss'><label>เพศ: </label> ผู้</div>
-                                    <div className='textLineCss'><label>สถานที่: </label> บางกะปิ</div>                                   
-                                </td>
-                                <td className='cardPartialIcon'>
-                                    <i className='empty star icon favIcon' fontSize='8em'></i>
-                                </td>
-                            </tr>
-                        </table>      
+                        <AnimalList animals={this.props.animals}/>
                     </div>    
                 </div>
             ) 
@@ -160,4 +129,10 @@ class AnimalPage extends React.Component{
     }
 }
 
-export default connect()(AnimalPage)
+const mapStateToProps = (store) => {
+    return {
+        animals: store.animals
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(AnimalPage))

@@ -26,7 +26,7 @@ class Home extends React.Component {
                 <h2>Home page</h2>
                 <AddButton parentPage={this}/>
                 {'  '}
-                <Button onClick={() => this.props.history.push('/animalpage')}>Adopt</Button>
+                <Button onClick={() => this.props.history.push('/animalpage/Open')}>Adopt</Button>
                 <div>
                     <p>Recently Added: </p>
                     <header>
