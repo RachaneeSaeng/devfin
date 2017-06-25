@@ -3,6 +3,7 @@ import * as firebase from 'firebase'
 // import {connect} from 'react-redux'
 // import reducer from '../app/redux/reducer/reducer'
 import { setLoggedIn } from '../app/redux/action/authen'
+import { setNotiCount } from '../app/redux/action/notification'
 
 class FirebaseUtil {
 
@@ -31,6 +32,7 @@ class FirebaseUtil {
 
   static handleSignedInUser(user) {
     this.reduxStore.dispatch(setLoggedIn(true))
+    this.updateNotificationCount()    
   }
 
   static handleSignedOutUser() {
@@ -121,6 +123,12 @@ class FirebaseUtil {
     return firebase.database().ref(`/animals/${animalId}`).once('value').then(snap => {
       return snap.val();
     });
+  }
+
+  static updateNotificationCount() {
+      firebase.database().ref(`notification/${firebase.auth().currentUser.uid}`).on('child_added', snap => {         
+          this.reduxStore.dispatch(setNotiCount(this.reduxStore.getState().notification + 1));
+      });
   }
 
   // function updateProfile() {

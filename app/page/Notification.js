@@ -8,38 +8,48 @@ import FirebaseUtil from '../../script/FirebaseUtil'
 class Notification extends React.Component {
     state = {notifications: []}
 
+    componentDidMount() {
+        if (this.props.isLoggedIn) {
+            this.queryNotification()
+        }
+    }
+
     componentDidUpdate(prevProps) {        
         if (prevProps != this.props && this.props.isLoggedIn) {
-            var thisObj = this  
-            var my =firebase.auth().currentUser.uid
-            firebase.database().ref(`notification/${firebase.auth().currentUser.uid}`).once('value', snap => {                
-                var notiObj = snap.val();
-
-                if (notiObj) {
-                    const notiIds = Object.keys(notiObj);            
-                    notiIds.forEach((item) => {
-                        FirebaseUtil.getAnimalDetail(notiObj[item].animalId).then(result => {
-                            this.state.notifications.push({
-                                id: item,            
-                                animalName: result.animalName,
-                                animalPhotoUrl: result.photo_urls[0],
-                                animalLocation: 'N/A',
-                                animalDesc: result.description,
-                                actorName: notiObj[item].actorName,
-                                actorEmail: notiObj[item].actorEmail,
-                                actorPhotoUrl: notiObj[item].actorPhotoUrl,
-                                timestamp: notiObj[item].timestamp,
-                                notiType: notiObj[item].notiType
-                            }) 
-                            thisObj.setState({notifications: this.state.notifications});                          
-                        })
-                    });
-                }
-            });
+            this.queryNotification()
         }  
     }
 
-    render() {          
+    queryNotification() {
+        var thisObj = this  
+        var my =firebase.auth().currentUser.uid
+        firebase.database().ref(`notification/${firebase.auth().currentUser.uid}`).once('value', snap => {                
+            var notiObj = snap.val();
+
+            if (notiObj) {
+                const notiIds = Object.keys(notiObj);            
+                notiIds.forEach((item) => {
+                    FirebaseUtil.getAnimalDetail(notiObj[item].animalId).then(result => {
+                        this.state.notifications.push({
+                            id: item,            
+                            animalName: result.animalName,
+                            animalPhotoUrl: result.photo_urls[0],
+                            animalLocation: 'N/A',
+                            animalDesc: result.description,
+                            actorName: notiObj[item].actorName,
+                            actorEmail: notiObj[item].actorEmail,
+                            actorPhotoUrl: notiObj[item].actorPhotoUrl,
+                            timestamp: notiObj[item].timestamp,
+                            notiType: notiObj[item].notiType
+                        }) 
+                        thisObj.setState({notifications: this.state.notifications});                          
+                    })
+                });
+            }
+        });
+    }
+
+    render() { 
         if(this.state.notifications.length == 0){
             return (<i className='notched circle loading icon'></i>)
         }

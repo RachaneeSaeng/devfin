@@ -6,6 +6,7 @@ import animals from './animal'
 import currentAnimal from './currentAnimal'
 import authen from './authen'
 import timeline from './timeline'
+import notification from './notification'
 
 export default combineReducers({
     script,
@@ -13,5 +14,6 @@ export default combineReducers({
     animals,
     currentAnimal,
     authen,
-    timeline
+    timeline,
+    notification
 }) 

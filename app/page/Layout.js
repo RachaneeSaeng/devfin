@@ -19,9 +19,7 @@ class Layout extends React.Component {
             'Favorite':'/#/animalpage/favorite',
             'My Animal':'/#/animalpage/myanimal',
             'My Request':'/#/animalpage/myrequest',
-            'My Adopted':'/#/animalpage/myadopted',
-            'Notification':'/#/notification',
-            'My Profile':'/#/myprofile',            
+            'My Adopted':'/#/animalpage/myadopted',            
         }    
     }
     
@@ -61,6 +59,17 @@ class Layout extends React.Component {
         return menuItems
     }
   
+    createNotiMenuItems() {
+        var thisObj = this  
+        const activeItem = this.state.activeItem    
+        return (
+            <Menu.Item key='Notification' name='Notification' href='/#/notification' onClick={this.handleItemClick.bind(thisObj)} active={activeItem === 'Notification'}>
+                Notification
+                {'  '}<span className="notification">{this.props.notiCount}</span>
+            </Menu.Item>
+        )
+    }
+
     createDefaultMenuItems(){
         var thisObj = this  
         var menuItems = []
@@ -115,7 +124,8 @@ class Layout extends React.Component {
                         </div>
                         {this.createMenuItems(this.mainMenuLinks)} 
                         <Divider hidden />
-                        {loggedIn ? this.createMenuItems(this.myMenuLinks) : null}                        
+                        {loggedIn ? this.createMenuItems(this.myMenuLinks) : null}    
+                        {loggedIn ? this.createNotiMenuItems() : null}                     
                         {loggedIn ? <Divider hidden/> : null}
                         {this.createDefaultMenuItems()}                     
                     </Sidebar>
@@ -127,7 +137,7 @@ class Layout extends React.Component {
                             </a>
                             <Header as='h2' style={headerStyle}>
                                 <Image shape='circular' src='/image/shelter128.png' />
-                                {' '}AniHome                                
+                                {' '}AniHome                        
                             </Header>
                         </div> 
                         <Segment basic>
@@ -144,6 +154,7 @@ class Layout extends React.Component {
 const mapStateToProps = (store) => {
     return {
         isLoggedIn: store.authen,
+        notiCount: store.notification
     }
 }
 

@@ -53,3 +53,11 @@ header div img {
     right: 0;  
     margin: auto;
 }
+
+.notification {
+    background-color: #fa3e3e;
+    border-radius: 2px;
+    color: #fff;
+    padding: 2px 2px;
+    margin: 5px;
+}
