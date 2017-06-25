@@ -13,66 +13,20 @@ class AnimalPage extends React.Component{
         super()
         this.state = {
             mode: 1,
-            LocList: [],
-            CenterLat: 0,
-            CenterLng: 0,
         }
-    }
-
-    PerformSearch(){
-        const text = $('#search-text-box').val();
-        
-    }
-
-    ChangeMode(m) {
-        if(m == 2){
-            var centerLat = 0
-            var centerLng = 0
-
-            this.state.LocList.map((loc) =>
-                {
-                    centerLat += loc.lat
-                    centerLng += loc.lng 
-                }                        
-            ) 
-
-            if (this.state.LocList.length > 0){
-                centerLat = centerLat / this.state.LocList.length 
-                centerLng = centerLng / this.state.LocList.length
-            } 
-
-            this.setState(
-                {
-                    CenterLat: centerLat,
-                    CenterLng: centerLng,
-                }
-            ) 
-        }
-
-        this.setState(
-            {
-                mode: m
-            }
-        )
     }
 
     componentDidMount(){
-        const animals = firebase.database().ref('animals')
-        this.props.dispatch(actionCreator.resetAnimal())
-        const status = this.props.match.params.type || 'Open'
-        animals.orderByChild('status').equalTo(status).on('child_added',
-            r => {
-                this.props.dispatch(actionCreator.addAnimal({key:r.key, ...(r.val())}))
-            })
+        this.refetch()
+    }
 
-        if(this.state.mode == 1)
-        {
-            $('#search-mode-card').prop('checked', true);
+    componentDidUpdate(next){
+        if (next.location.pathname + next.location.search !== this.props.location.pathname + this.props.location.search){
+            this.refetch()
         }
     }
     
     render(){ 
-
         if(this.state.mode == 2){
             const cenLat = this.props.animals.map( a => a.geo.lat).reduce((p, c) => p+c) / this.props.animals.length
             const cenLng = this.props.animals.map( a => a.geo.lng).reduce((p, c) => p+c) / this.props.animals.length
@@ -109,7 +63,6 @@ class AnimalPage extends React.Component{
             )
         }   
         else{
-            console.log(this.state.mode)
             return(
                 <div className='ui container'>
                     <div className='ui icon buttons'>
@@ -126,6 +79,36 @@ class AnimalPage extends React.Component{
                 </div>
             ) 
         }        
+    }
+
+    onChildAdded(filterFunc){
+        return (r) => {
+            console.log(r.val())
+            console.log(filterFunc)
+            if(filterFunc){
+                if(filterFunc(r.val()))
+                    this.props.dispatch(actionCreator.addAnimal({key:r.key, ...(r.val())}))
+            }else{
+                this.props.dispatch(actionCreator.addAnimal({key:r.key, ...(r.val())}))
+            }
+        }
+    }
+
+    refetch(){
+        const animals = firebase.database().ref('animals')
+        this.props.dispatch(actionCreator.resetAnimal())
+        const status = this.props.match.params.type || 'Open'
+        const by = this.props.location.search.includes('by')
+        const sort = this.props.match.query && this.props.match.query.sort || 'timestamp'
+
+        let query, filterFunc
+        if(by){
+            query = animals.orderByChild('owner/id').equalTo(firebase.auth().currentUser.uid)
+            filterFunc = (a)=>a.status==status
+        }else{
+            query = animals.orderByChild('status').equalTo(status)
+        }
+        query.on('child_added', this.onChildAdded(filterFunc).bind(this))
     }
 }
 

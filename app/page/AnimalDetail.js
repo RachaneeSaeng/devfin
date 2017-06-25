@@ -36,7 +36,6 @@ class AnimalDetail extends React.Component {
                 })
         }else{
             this.props.dispatch(actionCreator.createNew())
-            console.log('eiei')
             navigator.geolocation.getCurrentPosition( pos => {
                 console.log(pos)
                 this.props.dispatch(actionCreator.updateLocation({
@@ -156,7 +155,6 @@ class AnimalDetail extends React.Component {
                     location: $('#location').val(),
                     geo: {lat: parseFloat($('#lat').val()), lng: parseFloat($('#lng').val())},
                     description: $('#description').val(),
-                    contact: $('#contact').val(),
                     photo_urls: urls.concat(this.props.photoUrls),
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
                 }

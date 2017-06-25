@@ -11,15 +11,15 @@ class Layout extends React.Component {
         super()
         this.mainMenuLinks = {
             'Home':'/#/', 
-            'อยากมีบ้าน':'/#/animalpage/new',
-            'มีบ้านแล้ว':'/#/animalpage/adopted',
-            'Popular':'/#/animalpage/popular',           
+            'อยากมีบ้าน':'/#/animalpage/Open',
+            'มีบ้านแล้ว':'/#/animalpage/Adopted',
+            'Popular':'/#/animalpage/Open?sort=view',           
         }
         this.myMenuLinks = {           
             // 'My Favorite':'/#/animalpage/favorite',
-            'My Animal':'/#/animalpage/myanimal',
-            'My Request':'/#/animalpage/myrequest',
-            'My Adopted':'/#/animalpage/myadopted',            
+            'My Animal':'/#/animalpage/Open?by=me',
+            'My Request':'/#/animalpage/Requested?by=me',
+            'My Adopted':'/#/animalpage/Adopted?by=me',
         }    
     }
     
