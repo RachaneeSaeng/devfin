@@ -8,12 +8,12 @@ class FirebaseUtil {
 
   static initialApp(store) {
     var config = {
-      apiKey: "AIzaSyD8-qoZFdLW8aqEfl91EWapGK3za98g45I",
-      authDomain: "testproject-3782c.firebaseapp.com",
-      databaseURL: "https://testproject-3782c.firebaseio.com",
-      projectId: "testproject-3782c",
-      storageBucket: "testproject-3782c.appspot.com",
-      messagingSenderId: "303688420444"
+      apiKey: "AIzaSyC3bCd8GZlOSoC0tiD9Ets3lWhbo_TquQE",
+      authDomain: "devfin-project.firebaseapp.com",
+      databaseURL: "https://devfin-project.firebaseio.com",
+      projectId: "devfin-project",
+      storageBucket: "devfin-project.appspot.com",
+      messagingSenderId: "925604061013"
     };
     firebase.initializeApp(config)
     this.listenToAuthStateChange()
