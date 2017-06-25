@@ -16,7 +16,7 @@ class Layout extends React.Component {
             'Popular':'/#/animalpage/popular',           
         }
         this.myMenuLinks = {           
-            'My Favorite':'/#/animalpage/favorite',
+            // 'My Favorite':'/#/animalpage/favorite',
             'My Animal':'/#/animalpage/myanimal',
             'My Request':'/#/animalpage/myrequest',
             'My Adopted':'/#/animalpage/myadopted',            
