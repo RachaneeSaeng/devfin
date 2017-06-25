@@ -5,7 +5,7 @@ import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import FirebaseUtil from './script/FirebaseUtil'
 
-import {Layout, Home, AddAnimal, AnimalDetail, AnimalPage, AnimalTimeline, ContactUs, Login, Notification, UserProfile} from './app/page'
+import {Layout, Home, AddAnimal, AnimalDetail, AnimalPage, ContactUs, Login, Notification, UserProfile} from './app/page'
 import AppHead from './app/component/AppHead'
 
 import reducer from './app/redux/reducer/reducer'
@@ -23,8 +23,7 @@ const Root = () => (
                 <Route exact path='/' component={Home} />
                 <Route exact path='/addanimal' component={AnimalDetail} />
                 <Route exact path='/animaldetail/:id' component={AnimalDetail} />
-                <Route exact path='/animalpage/:type' component={AnimalPage} />
-                <Route exact path='/timeline' component={AnimalTimeline} />
+                <Route exact path='/animalpage/:type' component={AnimalPage} />                
                 <Route exact path='/contactus' component={ContactUs} />
                 <Route exact path='/login' component={Login} />
                 <Route exact path='/notification' component={Notification} />
