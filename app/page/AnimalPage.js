@@ -28,8 +28,8 @@ class AnimalPage extends React.Component{
     
     render(){ 
         if(this.state.mode == 2){
-            const cenLat = this.props.animals.map( a => a.geo.lat).reduce((p, c) => p+c) / this.props.animals.length
-            const cenLng = this.props.animals.map( a => a.geo.lng).reduce((p, c) => p+c) / this.props.animals.length
+            const cenLat = this.props.animals.map( a => a.geo.lat).reduce(((p, c) => p+c),0) / this.props.animals.length
+            const cenLng = this.props.animals.map( a => a.geo.lng).reduce(((p, c) => p+c),0) / this.props.animals.length
             return (
                 <div className='ui container'>
                     <div className='ui icon buttons'>
