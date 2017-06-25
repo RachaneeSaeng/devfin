@@ -143,7 +143,7 @@ class AnimalDetail extends React.Component {
                     animalType: $('#type').val(),
                     owner: {
                         id: auth.currentUser.uid,
-                        displayanme: auth.currentUser.displayName,
+                        displayname: auth.currentUser.displayName,
                         email: auth.currentUser.email,
                         photo: auth.currentUser.photoURL,
                     },
