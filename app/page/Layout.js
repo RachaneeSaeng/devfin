@@ -111,7 +111,7 @@ class Layout extends React.Component {
     }
 
     var appHeadStyle = {
-        'background-color': '#03A9F4'        
+        'backgroundColor': '#03A9F4'        
     }
      
     const visible  = this.state.visible   
