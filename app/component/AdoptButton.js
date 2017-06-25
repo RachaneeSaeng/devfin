@@ -8,7 +8,8 @@ class AdoptButton extends React.Component{
 
     adoptAnimal() {
         if (!this.props.isLoggedIn) {
-            this.props.parentPage.props.history.push('/login?redirectUrl=animaldetail/-KnOeLmXcJVxmc6-ehCR')
+            var animalId = this.props.parentPage.props.match.id;
+            this.props.parentPage.props.history.push(`/login?redirectUrl=animaldetail/${animalId}`)
         }        
         //Confirm      
         this.setState({ openAdopt: true })        
@@ -16,18 +17,16 @@ class AdoptButton extends React.Component{
     confirmAdopt() {
         this.setState({openAdopt: false })
         // Save data to database
-        console.log('yssss')
+        
     }
     cancelAdopt() {
-        this.setState({openAdopt: false })
-        // Save data to database
-        console.log('noo')
+        this.setState({openAdopt: false })        
     }
 
     render() {              
         return (  
             <div>
-                <Button className='float-right' onClick={this.adoptAnimal.bind(this)}>Adopt</Button>
+                <Button primary className='float-right' onClick={this.adoptAnimal.bind(this)}>Adopt</Button>
                  <Confirm
                     content='คุณต้องการรับสัตว์ตัวนี้ไปเลี้ยงใช่ไหม? หากคุณกดตกลง เราจะส่งคำขอของคุณไปยังผู้โพส.'
                     confirmButton='ตกลง' cancelButton='ยกเลิก' 
