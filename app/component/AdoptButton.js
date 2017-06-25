@@ -5,10 +5,25 @@ import {connect} from 'react-redux'
 
 class AdoptButton extends React.Component{
    
-    state = { openAdopt: false}
+    state = { show: true, openAdopt: false}
 
     componentDidMount(){
         this.parent = this.props.parentPage;
+        this.checkShow();
+    }
+
+    componentWillUpdate(prevProps) {
+        if(prevProps != this.props)
+            this.checkShow();
+    }
+
+    checkShow() {
+        if (this.props.isLoggedIn) {
+            if ((this.props.owner && this.props.owner.id == firebase.auth().currentUser.uid)
+             || this.props.status == 'Adopted' || this.props.status == 'Deleted') {
+                this.setState({show: false})
+             }
+        }
     }
 
     adoptAnimal() {
@@ -51,41 +66,32 @@ class AdoptButton extends React.Component{
         updates[`/notification/${owner.id}/${newNotiKey}`] = ownerNoti;      
         firebase.database().ref().update(updates);
     }
-
+    
     cancelAdopt() {
-        this.setState({openAdopt: false })        
-    }
-
-    canAdopt() {
-        return true;
+        this.setState({openAdopt: false })
     }
 
     render() {  
-        if (this.canAdopt) {
-            return (  
-                <div>
-                    <Button primary className='float-right' onClick={this.adoptAnimal.bind(this)}>Adopt</Button>
-                    <Confirm
-                        content='คุณต้องการรับสัตว์ตัวนี้ไปเลี้ยงใช่ไหม? หากคุณกดตกลง เราจะส่งคำขอของคุณไปยังผู้โพส.'
-                        confirmButton='ตกลง' cancelButton='ยกเลิก' 
-                        open={this.state.openAdopt}
-                        onCancel={this.cancelAdopt.bind(this)}
-                        onConfirm={this.confirmAdopt.bind(this)}
-                        />
-                </div>  
-            )
-        }  
-        else (
-            retun (null)
-        )         
-        
+        return (  
+            <div className={this.state.show ? '':'hidden'}>
+                <Button primary className='float-right' onClick={this.adoptAnimal.bind(this)}>Adopt</Button>
+                <Confirm
+                    content='คุณต้องการรับสัตว์ตัวนี้ไปเลี้ยงใช่ไหม? หากคุณกดตกลง เราจะส่งคำขอของคุณไปยังผู้โพส.'
+                    confirmButton='ตกลง' cancelButton='ยกเลิก' 
+                    open={this.state.openAdopt}
+                    onCancel={this.cancelAdopt.bind(this)}
+                    onConfirm={this.confirmAdopt.bind(this)}
+                    />
+            </div>  
+        )
     }
 }
 const mapStateToProps = (store) => {
     return {
         isLoggedIn: store.authen,
         animalId: store.currentAnimal.animalId,
-        owner: store.currentAnimal.owner
+        owner: store.currentAnimal.owner,
+        status: store.currentAnimal.status,
     }
 }
 

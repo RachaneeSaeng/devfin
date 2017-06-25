@@ -110,6 +110,10 @@ class Layout extends React.Component {
     var headerStyle = {
         'margin': '0.6rem'        
     }
+
+    var appHeadStyle = {
+        'background-color': '#03A9F4'        
+    }
      
     const visible  = this.state.visible   
     const loggedIn = this.props.isLoggedIn 
@@ -130,7 +134,7 @@ class Layout extends React.Component {
                         {this.createDefaultMenuItems()}                     
                     </Sidebar>
                     <Sidebar.Pusher onClick={this.hideVisibility.bind(this)}>
-                        <div className="ui top attached menu">
+                        <div className="ui top attached menu" style={appHeadStyle}>
                             <a className="item" onClick={this.toggleVisibility.bind(this)}>
                                 <i className="sidebar icon"></i>
                                 Menu
